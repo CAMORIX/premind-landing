@@ -265,13 +265,6 @@ function Navbar() {
           {/* CTA */}
 
           {/* Mobile-only CTA (smaller) */}
-          <Link
-            href="/login"
-            className="sm:hidden flex items-center gap-1 px-3.5 py-2 rounded-lg text-xs font-bold text-white"
-            style={{ background: "oklch(0.62 0.19 44)" }}
-          >
-            로그인
-          </Link>
         </div>
       </div>
 

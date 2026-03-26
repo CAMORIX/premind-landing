@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "PREMIND",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
+};
 
 export default function RootLayout({
   children,
@@ -8,8 +16,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <title>PREMIND</title>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link
           rel="stylesheet"
           as="style"
