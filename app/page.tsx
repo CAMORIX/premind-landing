@@ -656,8 +656,8 @@ export default function LandingPage() {
               transition={{ delay: 0.28, duration: 0.6 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-20"
             >
-              <Link
-                href="/login"
+              <a
+                href="mailto:support@camorix.com"
                 className="group flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-px"
                 style={{
                   background: "oklch(0.62 0.19 44)",
@@ -669,7 +669,7 @@ export default function LandingPage() {
                   size={14}
                   className="group-hover:translate-x-0.5 transition-transform"
                 />
-              </Link>
+              </a>
               <a
                 href="#features"
                 className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold border transition-all hover:border-white/20"
@@ -984,8 +984,8 @@ export default function LandingPage() {
                 <br />
                 모든 수업의 가능성을 한 단계 높이세요.
               </p>
-              <Link
-                href="/login"
+              <a
+                href="mailto:support@camorix.com"
                 className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-px"
                 style={{
                   background: "oklch(0.62 0.19 44)",
@@ -997,7 +997,7 @@ export default function LandingPage() {
                   size={14}
                   className="group-hover:translate-x-0.5 transition-transform"
                 />
-              </Link>
+              </a>
             </FadeIn>
           </div>
         </section>
