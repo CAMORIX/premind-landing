@@ -10,7 +10,7 @@ import {
   AnimatePresence,
 } from "motion/react";
 import Link from "next/link";
-import { ArrowRight, BarChart3, Brain, Monitor, Users } from "lucide-react";
+import { ArrowRight, BarChart3, Brain, Check, Monitor, Users, X } from "lucide-react";
 import { ReactLenis } from "lenis/react";
 
 /* ────────────────────────────────────────
@@ -993,6 +993,154 @@ export default function LandingPage() {
                 </FadeIn>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* ── Comparison ── */}
+        <section style={{ background: "oklch(0.978 0.003 60)" }}>
+          <div className="max-w-6xl mx-auto px-6 py-28">
+            <FadeIn className="mb-16 text-center">
+              <Overline>타사 비교</Overline>
+              <h2
+                className="text-3xl sm:text-4xl font-black tracking-[-0.025em] mb-5"
+                style={{ color: "oklch(0.15 0.018 45)", lineHeight: 1.2 }}
+              >
+                온라인만 되는 건
+                <br />
+                이제 충분하지 않습니다
+              </h2>
+              <p
+                className="text-sm sm:text-base leading-relaxed mx-auto"
+                style={{ color: "oklch(0.48 0 0)", maxWidth: "460px" }}
+              >
+                대부분의 강의 분석 솔루션은 온라인 강의에 한정됩니다.
+                PREMIND는 실제 강의실에 카메라를 설치해 오프라인 현장까지 분석합니다.
+              </p>
+            </FadeIn>
+
+            <FadeIn>
+              <div
+                className="max-w-2xl mx-auto rounded-2xl overflow-hidden"
+                style={{
+                  border: "1px solid oklch(0.88 0.006 55)",
+                  background: "oklch(1 0 0)",
+                }}
+              >
+                {/* 헤더 */}
+                <div
+                  className="grid grid-cols-[1fr_120px_120px]"
+                  style={{ borderBottom: "1px solid oklch(0.88 0.006 55)" }}
+                >
+                  <div className="px-6 py-4" />
+                  <div
+                    className="px-4 py-4 flex items-center justify-center"
+                    style={{ borderLeft: "1px solid oklch(0.88 0.006 55)" }}
+                  >
+                    <span
+                      className="text-xs font-bold"
+                      style={{ color: "oklch(0.58 0 0)" }}
+                    >
+                      타사 솔루션
+                    </span>
+                  </div>
+                  <div
+                    className="px-4 py-4 flex items-center justify-center"
+                    style={{
+                      borderLeft: "1px solid oklch(0.88 0.006 55)",
+                      background: "oklch(0.62 0.19 44 / 0.06)",
+                    }}
+                  >
+                    <span className="text-xs font-bold" style={{ color: "oklch(0.52 0.17 44)" }}>프리마인드</span>
+                  </div>
+                </div>
+
+                {/* 비교 행 */}
+                {[
+                  {
+                    label: "오프라인 강의실 카메라 분석",
+                    competitor: false,
+                    us: true,
+                    highlight: true,
+                  },
+                  {
+                    label: "온라인 강의 분석",
+                    competitor: true,
+                    us: true,
+                    highlight: false,
+                  },
+                  {
+                    label: "실시간 청중 집중도 측정",
+                    competitor: false,
+                    us: true,
+                    highlight: false,
+                  },
+                  {
+                    label: "강사 제스처·전달력 분석",
+                    competitor: false,
+                    us: true,
+                    highlight: false,
+                  },
+                  {
+                    label: "강의 종료 후 AI 리포트 자동 생성",
+                    competitor: false,
+                    us: true,
+                    highlight: false,
+                  },
+                ].map(({ label, competitor, highlight }) => (
+                  <div
+                    key={label}
+                    className="grid grid-cols-[1fr_120px_120px] items-center"
+                    style={{
+                      borderTop: "1px solid oklch(0.92 0.004 55)",
+                      background: highlight
+                        ? "oklch(0.62 0.19 44 / 0.04)"
+                        : "transparent",
+                    }}
+                  >
+                    <div className="px-6 py-4 flex items-center gap-2.5">
+                      {highlight && (
+                        <span
+                          className="shrink-0 text-[9px] font-black px-1.5 py-0.5 rounded tracking-widest uppercase"
+                          style={{
+                            background: "oklch(0.62 0.19 44 / 0.12)",
+                            color: "oklch(0.52 0.17 44)",
+                          }}
+                        >
+                          핵심
+                        </span>
+                      )}
+                      <span
+                        className="text-sm font-medium"
+                        style={{ color: "oklch(0.20 0.018 45)" }}
+                      >
+                        {label}
+                      </span>
+                    </div>
+                    <div
+                      className="py-4 flex items-center justify-center"
+                      style={{ borderLeft: "1px solid oklch(0.92 0.004 55)" }}
+                    >
+                      {competitor ? (
+                        <Check size={17} style={{ color: "oklch(0.60 0 0)" }} />
+                      ) : (
+                        <X size={17} style={{ color: "oklch(0.80 0 0)" }} />
+                      )}
+                    </div>
+                    <div
+                      className="py-4 flex items-center justify-center"
+                      style={{
+                        borderLeft: "1px solid oklch(0.92 0.004 55)",
+                        background: highlight
+                          ? "oklch(0.62 0.19 44 / 0.08)"
+                          : "oklch(0.62 0.19 44 / 0.03)",
+                      }}
+                    >
+                      <Check size={17} style={{ color: "oklch(0.52 0.17 44)" }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
           </div>
         </section>
 
