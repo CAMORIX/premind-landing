@@ -351,6 +351,9 @@ function DotGrid() {
    Lecture Report — 히어로 분석 리포트 UI
 ──────────────────────────────────────── */
 function LectureReport() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
   const data = [72, 78, 82, 85, 88, 91, 89, 87, 73, 65, 68, 75, 83, 87, 90, 88, 86, 87, 89, 91];
   const svgW = 200;
   const svgH = 48;
@@ -375,6 +378,7 @@ function LectureReport() {
 
   return (
     <div
+      ref={ref}
       className="w-full rounded-2xl overflow-hidden"
       style={{
         background: "oklch(0.11 0.018 44)",
@@ -417,7 +421,7 @@ function LectureReport() {
       <div className="p-5 space-y-3">
         {/* 4-metric grid */}
         <div className="grid grid-cols-2 gap-2.5">
-          {metrics.map(({ label, value, bar, color }) => (
+          {metrics.map(({ label, value, bar, color }, idx) => (
             <div
               key={label}
               className="rounded-xl p-3"
@@ -439,9 +443,12 @@ function LectureReport() {
                 className="h-1 rounded-full overflow-hidden"
                 style={{ background: "oklch(0.20 0.02 44)" }}
               >
-                <div
+                <motion.div
                   className="h-full rounded-full"
-                  style={{ width: `${bar * 100}%`, background: color }}
+                  style={{ background: color }}
+                  initial={{ width: "0%" }}
+                  animate={inView ? { width: `${bar * 100}%` } : { width: "0%" }}
+                  transition={{ duration: 0.7, delay: 0.2 + idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 />
               </div>
             </div>
@@ -476,14 +483,23 @@ function LectureReport() {
                 <stop offset="100%" stopColor="oklch(0.62 0.19 44)" stopOpacity="0" />
               </linearGradient>
             </defs>
-            <path d={area} fill="url(#areaGrad)" />
-            <path
+            <motion.path
+              d={area}
+              fill="url(#areaGrad)"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.5, delay: 1.2 }}
+            />
+            <motion.path
               d={line}
               fill="none"
               stroke="oklch(0.62 0.19 44)"
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={inView ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
+              transition={{ duration: 1.4, delay: 0.5, ease: "easeInOut" }}
             />
           </svg>
         </div>
@@ -602,9 +618,261 @@ function Overline({
 }
 
 /* ────────────────────────────────────────
+   Features Section
+──────────────────────────────────────── */
+function FeaturesSection() {
+  const [hovered, setHovered] = useState<string | null>(null);
+  const features = [
+    {
+      num: "01", icon: <Monitor size={18} />, accent: "oklch(0.62 0.19 44)",
+      title: "강의실 카메라로 청중 전체를 실시간 분석합니다",
+      description: "오프라인 강의실에 카메라를 설치하면, 32명의 청중이 지금 얼마나 집중하고 있는지 한눈에 보입니다. 집중도가 떨어지는 구간을 실시간으로 감지해 강의 중 즉각 대응할 수 있습니다.",
+    },
+    {
+      num: "02", icon: <Brain size={18} />, accent: "oklch(0.52 0.18 200)",
+      title: "강사의 전달력을 AI가 객관적으로 평가합니다",
+      description: "말하는 속도, 시선 분배, 제스처, 질문 빈도—강사의 발표 방식을 AI가 정량 분석합니다. \"잘 가르쳤나\"를 막연히 느끼는 대신, 수치로 확인하고 다음 강의에서 정확히 개선하세요.",
+    },
+    {
+      num: "03", icon: <BarChart3 size={18} />, accent: "oklch(0.60 0.17 80)",
+      title: "강의 종료 즉시, 개선 리포트가 완성됩니다",
+      description: "강의가 끝나면 분석 API가 자동으로 리포트를 생성합니다. 청중 집중도 추이, 강사 전달력 점수, 구간별 피드백까지—다음 강의를 위한 구체적인 개선점이 정리되어 전달됩니다.",
+    },
+  ];
+  return (
+    <section id="features" style={{ background: "oklch(0.978 0.003 60)" }}>
+      <div className="max-w-6xl mx-auto px-6 py-28">
+        <FadeIn className="mb-20">
+          <Overline>핵심 기능</Overline>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-[-0.025em]" style={{ color: "oklch(0.15 0.018 45)", lineHeight: 1.2 }}>
+            강의를 개선하려면<br />먼저 데이터가 필요합니다
+          </h2>
+        </FadeIn>
+        <div>
+          {features.map(({ num, icon, title, description, accent }, i) => (
+            <FadeIn key={num} delay={i * 0.07}>
+              <div
+                className="relative grid grid-cols-[64px_1fr] md:grid-cols-[64px_1fr_40px] gap-6 md:gap-10 py-10 border-t items-start cursor-default"
+                style={{ borderColor: "oklch(0.88 0.006 55)" }}
+                onMouseEnter={() => setHovered(num)}
+                onMouseLeave={() => setHovered(null)}
+              >
+                <AnimatePresence>
+                  {hovered === num && (
+                    <motion.div
+                      key="bg"
+                      layoutId="feature-hover-bg"
+                      className="absolute inset-0 -mx-3 rounded-xl pointer-events-none"
+                      style={{ background: "oklch(0.15 0.018 45 / 0.04)" }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    />
+                  )}
+                </AnimatePresence>
+                <span
+                  className="text-3xl font-black leading-none tabular-nums select-none pt-0.5 transition-colors duration-200"
+                  style={{ color: hovered === num ? accent : "oklch(0.86 0.008 55)" }}
+                >
+                  {num}
+                </span>
+                <div>
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200"
+                      style={{ background: hovered === num ? `${accent}28` : `${accent}16`, color: accent }}
+                    >
+                      {icon}
+                    </div>
+                    <h3
+                      className="text-lg font-black transition-colors duration-200"
+                      style={{ color: hovered === num ? accent : "oklch(0.15 0.018 45)" }}
+                    >
+                      {title}
+                    </h3>
+                  </div>
+                  <motion.p
+                    className="text-sm leading-[1.85]"
+                    animate={{ x: hovered === num ? 3 : 0, opacity: hovered === num ? 1 : 0.65 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ color: "oklch(0.48 0 0)", maxWidth: "580px" }}
+                  >
+                    {description}
+                  </motion.p>
+                </div>
+                <AnimatePresence>
+                  {hovered === num && (
+                    <motion.div
+                      className="hidden md:flex items-start pt-1"
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -6 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center border" style={{ borderColor: accent, color: accent }}>
+                        <ArrowRight size={12} />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </FadeIn>
+          ))}
+          <div className="border-t" style={{ borderColor: "oklch(0.88 0.006 55)" }} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ────────────────────────────────────────
+   How It Works Steps
+──────────────────────────────────────── */
+function HowItWorksSteps() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const steps = [
+    { step: 1, title: "환경 연동", icon: <Users size={17} />, description: "오프라인 강의실에 카메라를 설치하거나, 온라인 강의 플랫폼을 연동하세요. 초기 설정은 당일 완료됩니다." },
+    { step: 2, title: "강의 중 실시간 분석", icon: <Monitor size={17} />, description: "강의가 진행되는 동안 AI가 청중 집중도와 강사의 전달력을 자동으로 측정합니다. 대시보드에서 현황을 확인하세요." },
+    { step: 3, title: "개선 리포트 수령", icon: <BarChart3 size={17} />, description: "강의 종료 후 분석 API가 리포트를 자동 생성합니다. 다음 강의에서 무엇을 바꿔야 할지 구체적으로 알 수 있습니다." },
+  ];
+  return (
+    <div ref={ref} className="relative grid grid-cols-1 md:grid-cols-3 gap-14">
+      {/* Animated connector */}
+      <div className="hidden md:block absolute top-[18px] left-[calc(16.5%+20px)] right-[calc(16.5%+20px)] h-px overflow-hidden">
+        <motion.div
+          className="h-full w-full"
+          style={{ borderTop: "1.5px dashed oklch(0.62 0.19 44 / 0.45)", originX: 0 }}
+          initial={{ scaleX: 0 }}
+          animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
+          transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
+      {steps.map(({ step, title, description, icon }, i) => (
+        <motion.div
+          key={step}
+          initial={{ opacity: 0, y: 18 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="relative w-10 h-10 mb-6">
+            <motion.div
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 380, damping: 18, delay: 0.35 + i * 0.15 }}
+              style={{ background: "oklch(0.97 0.003 60)", border: "1px solid oklch(0.88 0.006 55)", color: "oklch(0.62 0.19 44)" }}
+            >
+              {icon}
+            </motion.div>
+            <span className="absolute -top-1.5 -right-1.5 w-[18px] h-[18px] rounded-full text-[9px] font-black text-white flex items-center justify-center" style={{ background: "oklch(0.62 0.19 44)" }}>
+              {step}
+            </span>
+          </div>
+          <h3 className="text-base font-black mb-2" style={{ color: "oklch(0.15 0.018 45)" }}>{title}</h3>
+          <p className="text-sm leading-relaxed" style={{ color: "oklch(0.50 0 0)" }}>{description}</p>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+/* ────────────────────────────────────────
+   Comparison Table
+──────────────────────────────────────── */
+function ComparisonTable() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const rows = [
+    { label: "오프라인 강의실 카메라 분석", competitor: false, highlight: true },
+    { label: "온라인 강의 분석", competitor: true, highlight: false },
+    { label: "실시간 청중 집중도 측정", competitor: false, highlight: false },
+    { label: "강사 제스처·전달력 분석", competitor: false, highlight: false },
+    { label: "강의 종료 후 AI 리포트 자동 생성", competitor: false, highlight: false },
+  ];
+  return (
+    <div ref={ref} className="max-w-2xl mx-auto rounded-2xl overflow-hidden" style={{ border: "1px solid oklch(0.88 0.006 55)", background: "oklch(1 0 0)" }}>
+      <motion.div
+        className="grid grid-cols-[1fr_120px_120px]"
+        style={{ borderBottom: "1px solid oklch(0.88 0.006 55)" }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.4 }}
+      >
+        <div className="px-6 py-4" />
+        <div className="px-4 py-4 flex items-center justify-center" style={{ borderLeft: "1px solid oklch(0.88 0.006 55)" }}>
+          <span className="text-xs font-bold" style={{ color: "oklch(0.58 0 0)" }}>타사 솔루션</span>
+        </div>
+        <div className="px-4 py-4 flex items-center justify-center" style={{ borderLeft: "1px solid oklch(0.88 0.006 55)", background: "oklch(0.62 0.19 44 / 0.06)" }}>
+          <span className="text-xs font-bold" style={{ color: "oklch(0.52 0.17 44)" }}>프리마인드</span>
+        </div>
+      </motion.div>
+      {rows.map(({ label, competitor, highlight }, i) => (
+        <motion.div
+          key={label}
+          className="grid grid-cols-[1fr_120px_120px] items-center"
+          style={{ borderTop: "1px solid oklch(0.92 0.004 55)", background: highlight ? "oklch(0.62 0.19 44 / 0.04)" : "transparent" }}
+          initial={{ opacity: 0, x: -12 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.4, delay: 0.1 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="px-6 py-4 flex items-center gap-2.5">
+            {highlight && (
+              <span className="shrink-0 text-[9px] font-black px-1.5 py-0.5 rounded tracking-widest uppercase" style={{ background: "oklch(0.62 0.19 44 / 0.12)", color: "oklch(0.52 0.17 44)" }}>핵심</span>
+            )}
+            <span className="text-sm font-medium" style={{ color: "oklch(0.20 0.018 45)" }}>{label}</span>
+          </div>
+          <div className="py-4 flex items-center justify-center" style={{ borderLeft: "1px solid oklch(0.92 0.004 55)" }}>
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 500, damping: 20, delay: 0.2 + i * 0.07 }}
+            >
+              {competitor ? <Check size={17} style={{ color: "oklch(0.60 0 0)" }} /> : <X size={17} style={{ color: "oklch(0.75 0 0)" }} />}
+            </motion.div>
+          </div>
+          <div className="py-4 flex items-center justify-center" style={{ borderLeft: "1px solid oklch(0.92 0.004 55)", background: highlight ? "oklch(0.62 0.19 44 / 0.08)" : "oklch(0.62 0.19 44 / 0.03)" }}>
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 500, damping: 20, delay: 0.28 + i * 0.07 }}
+            >
+              <Check size={17} style={{ color: "oklch(0.52 0.17 44)" }} />
+            </motion.div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+/* ────────────────────────────────────────
    Main
 ──────────────────────────────────────── */
 export default function LandingPage() {
+  const heroRef = useRef<HTMLElement>(null);
+  const heroRawX = useMotionValue(0);
+  const heroRawY = useMotionValue(0);
+  const glowX = useSpring(heroRawX, { stiffness: 45, damping: 18, mass: 0.6 });
+  const glowY = useSpring(heroRawY, { stiffness: 45, damping: 18, mass: 0.6 });
+  const glowOffsetX = useTransform(glowX, [-0.5, 0.5], [-80, 80]);
+  const glowOffsetY = useTransform(glowY, [-0.5, 0.5], [-35, 35]);
+  const illustX = useTransform(glowX, [-0.5, 0.5], [10, -10]);
+  const illustY = useTransform(glowY, [-0.5, 0.5], [5, -5]);
+
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      heroRawX.set((e.clientX - rect.left) / rect.width - 0.5);
+      heroRawY.set((e.clientY - rect.top) / rect.height - 0.5);
+    };
+    el.addEventListener("mousemove", onMove);
+    return () => el.removeEventListener("mousemove", onMove);
+  }, [heroRawX, heroRawY]);
+
   return (
     <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
       <div className="min-h-screen overflow-x-hidden">
@@ -612,19 +880,24 @@ export default function LandingPage() {
 
         {/* ── Hero ── */}
         <section
+          ref={heroRef}
           className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20 px-6 overflow-hidden"
           style={{ background: "oklch(0.09 0.018 44)" }}
         >
           <DotGrid />
 
-          {/* Ambient glow */}
-          <div
-            className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px]"
-            style={{
-              background:
-                "radial-gradient(ellipse at 50% 0%, oklch(0.62 0.19 44 / 0.14) 0%, transparent 65%)",
-            }}
-          />
+          {/* Ambient glow — follows mouse */}
+          <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px]">
+            <motion.div
+              className="w-full h-full"
+              style={{
+                x: glowOffsetX,
+                y: glowOffsetY,
+                background:
+                  "radial-gradient(ellipse at 50% 0%, oklch(0.62 0.19 44 / 0.18) 0%, transparent 65%)",
+              }}
+            />
+          </div>
 
           <div className="relative z-10 max-w-6xl mx-auto w-full">
 
@@ -716,19 +989,24 @@ export default function LandingPage() {
               </div>
 
               {/* Right — illustration */}
+              {/* Outer: parallax / Inner: entry animation */}
               <motion.div
-                initial={{ opacity: 0, x: 32 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.22, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                 className="hidden lg:flex items-center justify-center shrink-0"
-                style={{ width: "clamp(300px, 38vw, 500px)" }}
+                style={{ width: "clamp(300px, 38vw, 500px)", x: illustX, y: illustY }}
               >
-                <img
-                  src="/illust.png"
-                  alt=""
-                  className="w-full h-auto"
-                  style={{ mixBlendMode: "screen" }}
-                />
+                <motion.div
+                  initial={{ opacity: 0, x: 32 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.22, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                  className="w-full"
+                >
+                  <img
+                    src="/illust.png"
+                    alt=""
+                    className="w-full h-auto"
+                    style={{ mixBlendMode: "screen" }}
+                  />
+                </motion.div>
               </motion.div>
             </div>
 
@@ -753,104 +1031,7 @@ export default function LandingPage() {
           />
         </section>
 
-        {/* ── Features ── */}
-        <section id="features" style={{ background: "oklch(0.978 0.003 60)" }}>
-          <div className="max-w-6xl mx-auto px-6 py-28">
-            <FadeIn className="mb-20">
-              <Overline>핵심 기능</Overline>
-              <h2
-                className="text-3xl sm:text-4xl font-black tracking-[-0.025em]"
-                style={{ color: "oklch(0.15 0.018 45)", lineHeight: 1.2 }}
-              >
-                강의를 개선하려면
-                <br />
-                먼저 데이터가 필요합니다
-              </h2>
-            </FadeIn>
-
-            <div>
-              {[
-                {
-                  num: "01",
-                  icon: <Monitor size={18} />,
-                  title: "강의실 카메라로 청중 전체를 실시간 분석합니다",
-                  description:
-                    "오프라인 강의실에 카메라를 설치하면, 32명의 청중이 지금 얼마나 집중하고 있는지 한눈에 보입니다. 집중도가 떨어지는 구간을 실시간으로 감지해 강의 중 즉각 대응할 수 있습니다.",
-                  accent: "oklch(0.62 0.19 44)",
-                },
-                {
-                  num: "02",
-                  icon: <Brain size={18} />,
-                  title: "강사의 전달력을 AI가 객관적으로 평가합니다",
-                  description:
-                    "말하는 속도, 시선 분배, 제스처, 질문 빈도—강사의 발표 방식을 AI가 정량 분석합니다. \"잘 가르쳤나\"를 막연히 느끼는 대신, 수치로 확인하고 다음 강의에서 정확히 개선하세요.",
-                  accent: "oklch(0.52 0.18 200)",
-                },
-                {
-                  num: "03",
-                  icon: <BarChart3 size={18} />,
-                  title: "강의 종료 즉시, 개선 리포트가 완성됩니다",
-                  description:
-                    "강의가 끝나면 분석 API가 자동으로 리포트를 생성합니다. 청중 집중도 추이, 강사 전달력 점수, 구간별 피드백까지—다음 강의를 위한 구체적인 개선점이 정리되어 전달됩니다.",
-                  accent: "oklch(0.60 0.17 80)",
-                },
-              ].map(({ num, icon, title, description, accent }, i) => (
-                <FadeIn key={num} delay={i * 0.07}>
-                  <div
-                    className="group grid grid-cols-[64px_1fr] md:grid-cols-[64px_1fr_40px] gap-6 md:gap-10 py-10 border-t items-start cursor-default"
-                    style={{ borderColor: "oklch(0.88 0.006 55)" }}
-                  >
-                    {/* Step number */}
-                    <span
-                      className="text-3xl font-black leading-none tabular-nums select-none pt-0.5"
-                      style={{ color: "oklch(0.86 0.008 55)" }}
-                    >
-                      {num}
-                    </span>
-
-                    {/* Content */}
-                    <div>
-                      <div className="flex items-center gap-2.5 mb-3">
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                          style={{ background: `${accent}16`, color: accent }}
-                        >
-                          {icon}
-                        </div>
-                        <h3
-                          className="text-lg font-black"
-                          style={{ color: "oklch(0.15 0.018 45)" }}
-                        >
-                          {title}
-                        </h3>
-                      </div>
-                      <p
-                        className="text-sm leading-[1.85]"
-                        style={{ color: "oklch(0.48 0 0)", maxWidth: "580px" }}
-                      >
-                        {description}
-                      </p>
-                    </div>
-
-                    {/* Arrow on hover */}
-                    <div className="hidden md:flex items-start pt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <div
-                        className="w-8 h-8 rounded-full flex items-center justify-center border"
-                        style={{ borderColor: accent, color: accent }}
-                      >
-                        <ArrowRight size={12} />
-                      </div>
-                    </div>
-                  </div>
-                </FadeIn>
-              ))}
-              <div
-                className="border-t"
-                style={{ borderColor: "oklch(0.88 0.006 55)" }}
-              />
-            </div>
-          </div>
-        </section>
+        <FeaturesSection />
 
         {/* ── Stats ── */}
         <section style={{ background: "oklch(0.11 0.018 44)" }}>
@@ -923,76 +1104,7 @@ export default function LandingPage() {
                 강의 개선
               </h2>
             </FadeIn>
-
-            <div className="relative grid grid-cols-1 md:grid-cols-3 gap-14">
-              {/* Dashed connector */}
-              <div
-                className="hidden md:block absolute top-[18px] left-[calc(16.5%+20px)] right-[calc(16.5%+20px)] h-px"
-                style={{
-                  borderTop: "1.5px dashed oklch(0.62 0.19 44 / 0.25)",
-                }}
-              />
-
-              {[
-                {
-                  step: 1,
-                  title: "환경 연동",
-                  description:
-                    "오프라인 강의실에 카메라를 설치하거나, 온라인 강의 플랫폼을 연동하세요. 초기 설정은 당일 완료됩니다.",
-                  icon: <Users size={17} />,
-                },
-                {
-                  step: 2,
-                  title: "강의 중 실시간 분석",
-                  description:
-                    "강의가 진행되는 동안 AI가 청중 집중도와 강사의 전달력을 자동으로 측정합니다. 대시보드에서 현황을 확인하세요.",
-                  icon: <Monitor size={17} />,
-                },
-                {
-                  step: 3,
-                  title: "개선 리포트 수령",
-                  description:
-                    "강의 종료 후 분석 API가 리포트를 자동 생성합니다. 다음 강의에서 무엇을 바꿔야 할지 구체적으로 알 수 있습니다.",
-                  icon: <BarChart3 size={17} />,
-                },
-              ].map(({ step, title, description, icon }, i) => (
-                <FadeIn key={step} delay={i * 0.1}>
-                  <div>
-                    {/* Icon box with step badge */}
-                    <div className="relative w-10 h-10 mb-6">
-                      <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center"
-                        style={{
-                          background: "oklch(0.97 0.003 60)",
-                          border: "1px solid oklch(0.88 0.006 55)",
-                          color: "oklch(0.62 0.19 44)",
-                        }}
-                      >
-                        {icon}
-                      </div>
-                      <span
-                        className="absolute -top-1.5 -right-1.5 w-[18px] h-[18px] rounded-full text-[9px] font-black text-white flex items-center justify-center"
-                        style={{ background: "oklch(0.62 0.19 44)" }}
-                      >
-                        {step}
-                      </span>
-                    </div>
-                    <h3
-                      className="text-base font-black mb-2"
-                      style={{ color: "oklch(0.15 0.018 45)" }}
-                    >
-                      {title}
-                    </h3>
-                    <p
-                      className="text-sm leading-relaxed"
-                      style={{ color: "oklch(0.50 0 0)" }}
-                    >
-                      {description}
-                    </p>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
+            <HowItWorksSteps />
           </div>
         </section>
 
@@ -1017,130 +1129,7 @@ export default function LandingPage() {
                 PREMIND는 실제 강의실에 카메라를 설치해 오프라인 현장까지 분석합니다.
               </p>
             </FadeIn>
-
-            <FadeIn>
-              <div
-                className="max-w-2xl mx-auto rounded-2xl overflow-hidden"
-                style={{
-                  border: "1px solid oklch(0.88 0.006 55)",
-                  background: "oklch(1 0 0)",
-                }}
-              >
-                {/* 헤더 */}
-                <div
-                  className="grid grid-cols-[1fr_120px_120px]"
-                  style={{ borderBottom: "1px solid oklch(0.88 0.006 55)" }}
-                >
-                  <div className="px-6 py-4" />
-                  <div
-                    className="px-4 py-4 flex items-center justify-center"
-                    style={{ borderLeft: "1px solid oklch(0.88 0.006 55)" }}
-                  >
-                    <span
-                      className="text-xs font-bold"
-                      style={{ color: "oklch(0.58 0 0)" }}
-                    >
-                      타사 솔루션
-                    </span>
-                  </div>
-                  <div
-                    className="px-4 py-4 flex items-center justify-center"
-                    style={{
-                      borderLeft: "1px solid oklch(0.88 0.006 55)",
-                      background: "oklch(0.62 0.19 44 / 0.06)",
-                    }}
-                  >
-                    <span className="text-xs font-bold" style={{ color: "oklch(0.52 0.17 44)" }}>프리마인드</span>
-                  </div>
-                </div>
-
-                {/* 비교 행 */}
-                {[
-                  {
-                    label: "오프라인 강의실 카메라 분석",
-                    competitor: false,
-                    us: true,
-                    highlight: true,
-                  },
-                  {
-                    label: "온라인 강의 분석",
-                    competitor: true,
-                    us: true,
-                    highlight: false,
-                  },
-                  {
-                    label: "실시간 청중 집중도 측정",
-                    competitor: false,
-                    us: true,
-                    highlight: false,
-                  },
-                  {
-                    label: "강사 제스처·전달력 분석",
-                    competitor: false,
-                    us: true,
-                    highlight: false,
-                  },
-                  {
-                    label: "강의 종료 후 AI 리포트 자동 생성",
-                    competitor: false,
-                    us: true,
-                    highlight: false,
-                  },
-                ].map(({ label, competitor, highlight }) => (
-                  <div
-                    key={label}
-                    className="grid grid-cols-[1fr_120px_120px] items-center"
-                    style={{
-                      borderTop: "1px solid oklch(0.92 0.004 55)",
-                      background: highlight
-                        ? "oklch(0.62 0.19 44 / 0.04)"
-                        : "transparent",
-                    }}
-                  >
-                    <div className="px-6 py-4 flex items-center gap-2.5">
-                      {highlight && (
-                        <span
-                          className="shrink-0 text-[9px] font-black px-1.5 py-0.5 rounded tracking-widest uppercase"
-                          style={{
-                            background: "oklch(0.62 0.19 44 / 0.12)",
-                            color: "oklch(0.52 0.17 44)",
-                          }}
-                        >
-                          핵심
-                        </span>
-                      )}
-                      <span
-                        className="text-sm font-medium"
-                        style={{ color: "oklch(0.20 0.018 45)" }}
-                      >
-                        {label}
-                      </span>
-                    </div>
-                    <div
-                      className="py-4 flex items-center justify-center"
-                      style={{ borderLeft: "1px solid oklch(0.92 0.004 55)" }}
-                    >
-                      {competitor ? (
-                        <Check size={17} style={{ color: "oklch(0.60 0 0)" }} />
-                      ) : (
-                        <X size={17} style={{ color: "oklch(0.80 0 0)" }} />
-                      )}
-                    </div>
-                    <div
-                      className="py-4 flex items-center justify-center"
-                      style={{
-                        borderLeft: "1px solid oklch(0.92 0.004 55)",
-                        background: highlight
-                          ? "oklch(0.62 0.19 44 / 0.08)"
-                          : "oklch(0.62 0.19 44 / 0.03)",
-                      }}
-                    >
-                      <Check size={17} style={{ color: "oklch(0.52 0.17 44)" }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </FadeIn>
+            <ComparisonTable />
           </div>
         </section>
 
