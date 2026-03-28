@@ -999,8 +999,8 @@ export default function LandingPage() {
   const glowY = useSpring(heroRawY, { stiffness: 45, damping: 18, mass: 0.6 });
   const glowOffsetX = useTransform(glowX, [-0.5, 0.5], [-80, 80]);
   const glowOffsetY = useTransform(glowY, [-0.5, 0.5], [-35, 35]);
-  const illustX = useTransform(glowX, [-0.5, 0.5], [10, -10]);
-  const illustY = useTransform(glowY, [-0.5, 0.5], [5, -5]);
+  const illustX = useTransform(glowX, [-0.5, 0.5], [20, -20]);
+  const illustY = useTransform(glowY, [-0.5, 0.5], [10, -10]);
 
   useEffect(() => {
     const el = heroRef.current;
@@ -1137,8 +1137,12 @@ export default function LandingPage() {
               >
                 <motion.div
                   initial={{ opacity: 0, x: 32 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.22, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                  animate={{ opacity: 1, x: 0, y: [0, -18, 0] }}
+                  transition={{
+                    opacity: { delay: 0.22, duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+                    x: { delay: 0.22, duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+                    y: { delay: 1.1, duration: 4.5, repeat: Infinity, ease: "easeInOut" },
+                  }}
                   className="w-full"
                 >
                   <img
