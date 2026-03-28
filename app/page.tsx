@@ -848,6 +848,147 @@ function ComparisonTable() {
 }
 
 /* ────────────────────────────────────────
+   Product Screenshots
+──────────────────────────────────────── */
+const SCREENS = [
+  {
+    id: "full",
+    label: "강의 분석 리포트",
+    src: "/analysis_full.png",
+    alt: "강의 전체 분석 리포트 화면",
+  },
+  {
+    id: "slide",
+    label: "슬라이드별 분석",
+    src: "/analysis_per_slide.png",
+    alt: "슬라이드별 세부 분석 화면",
+  },
+];
+
+function ProductScreenshots() {
+  const [active, setActive] = useState("full");
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section style={{ background: "oklch(0.11 0.018 44)" }}>
+      <div className="max-w-6xl mx-auto px-6 py-24" ref={ref}>
+        {/* Header */}
+        <motion.div
+          className="mb-12 text-center"
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Overline light>실제 서비스 화면</Overline>
+          <h2
+            className="text-3xl sm:text-4xl font-black tracking-[-0.025em]"
+            style={{ color: "oklch(0.96 0.005 55)", lineHeight: 1.2 }}
+          >
+            강의가 끝나면
+            <br />
+            리포트가 완성됩니다
+          </h2>
+        </motion.div>
+
+        {/* Tab switcher */}
+        <motion.div
+          className="flex justify-center mb-8"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.4, delay: 0.15 }}
+        >
+          <div
+            className="inline-flex rounded-xl p-1 gap-1"
+            style={{ background: "oklch(0.18 0.018 44)" }}
+          >
+            {SCREENS.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => setActive(s.id)}
+                className="relative px-5 py-2 rounded-lg text-sm font-semibold transition-colors duration-150"
+                style={{
+                  color:
+                    active === s.id
+                      ? "oklch(0.15 0.018 45)"
+                      : "oklch(0.60 0 0)",
+                }}
+              >
+                {active === s.id && (
+                  <motion.div
+                    layoutId="screen-tab-bg"
+                    className="absolute inset-0 rounded-lg"
+                    style={{ background: "oklch(0.96 0.005 55)" }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{s.label}</span>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Browser mock + screenshot */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.65, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="rounded-2xl overflow-hidden shadow-2xl"
+          style={{
+            border: "1px solid oklch(0.25 0.015 44)",
+            background: "oklch(0.16 0.015 44)",
+          }}
+        >
+          {/* Browser chrome bar */}
+          <div
+            className="flex items-center gap-2 px-4 py-3 border-b"
+            style={{ borderColor: "oklch(0.22 0.015 44)" }}
+          >
+            <div className="flex gap-1.5">
+              <div className="w-3 h-3 rounded-full" style={{ background: "oklch(0.65 0.18 25)" }} />
+              <div className="w-3 h-3 rounded-full" style={{ background: "oklch(0.75 0.16 80)" }} />
+              <div className="w-3 h-3 rounded-full" style={{ background: "oklch(0.65 0.18 145)" }} />
+            </div>
+            <div
+              className="flex-1 mx-4 rounded-md px-3 py-1 text-xs text-center"
+              style={{
+                background: "oklch(0.20 0.015 44)",
+                color: "oklch(0.45 0 0)",
+                maxWidth: "280px",
+                margin: "0 auto",
+              }}
+            >
+              app.premind.ai
+            </div>
+          </div>
+
+          {/* Screenshot */}
+          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "16/9" }}>
+            <AnimatePresence mode="wait">
+              {SCREENS.map(
+                (s) =>
+                  s.id === active && (
+                    <motion.img
+                      key={s.id}
+                      src={s.src}
+                      alt={s.alt}
+                      className="w-full h-full object-cover object-top"
+                      initial={{ opacity: 0, scale: 1.015 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.985 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                    />
+                  )
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ────────────────────────────────────────
    Main
 ──────────────────────────────────────── */
 export default function LandingPage() {
@@ -1032,6 +1173,8 @@ export default function LandingPage() {
         </section>
 
         <FeaturesSection />
+
+        <ProductScreenshots />
 
         {/* ── Stats ── */}
         <section style={{ background: "oklch(0.11 0.018 44)" }}>
