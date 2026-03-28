@@ -348,34 +348,29 @@ function DotGrid() {
 }
 
 /* ────────────────────────────────────────
-   Product Preview — 히어로 제품 UI 시각화
+   Lecture Report — 히어로 분석 리포트 UI
 ──────────────────────────────────────── */
-const STUDENT_LEVELS = [
-  0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0, 2, 0, 0, 1, 0,
-  0, 0, 1, 2, 0, 0,
-];
+function LectureReport() {
+  const data = [72, 78, 82, 85, 88, 91, 89, 87, 73, 65, 68, 75, 83, 87, 90, 88, 86, 87, 89, 91];
+  const svgW = 200;
+  const svgH = 48;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const pts = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * svgW;
+    const y = (svgH - 4) - ((v - min) / (max - min)) * (svgH - 10);
+    return [x, y] as [number, number];
+  });
+  const line = pts
+    .map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)},${y.toFixed(1)}`)
+    .join(" ");
+  const area = `${line} L ${svgW},${svgH} L 0,${svgH} Z`;
 
-function ProductPreview() {
-  const focused = STUDENT_LEVELS.filter((l) => l === 0).length;
-  const normal = STUDENT_LEVELS.filter((l) => l === 1).length;
-  const attention = STUDENT_LEVELS.filter((l) => l === 2).length;
-
-  const levelStyles = [
-    {
-      bg: "oklch(0.62 0.19 44 / 0.15)",
-      border: "oklch(0.62 0.19 44 / 0.35)",
-      color: "oklch(0.72 0.15 44)",
-    },
-    {
-      bg: "oklch(0.70 0.12 80 / 0.12)",
-      border: "oklch(0.70 0.12 80 / 0.30)",
-      color: "oklch(0.68 0.12 80)",
-    },
-    {
-      bg: "oklch(0.58 0.12 220 / 0.12)",
-      border: "oklch(0.58 0.12 220 / 0.30)",
-      color: "oklch(0.58 0.12 220)",
-    },
+  const metrics = [
+    { label: "청중 집중도", value: "91%", bar: 0.91, color: "oklch(0.62 0.19 44)" },
+    { label: "강사 전달력", value: "8.4 / 10", bar: 0.84, color: "oklch(0.52 0.18 200)" },
+    { label: "제스처 활용", value: "적극적", bar: 0.78, color: "oklch(0.60 0.17 80)" },
+    { label: "발표 속도", value: "적정 범위", bar: 0.88, color: "oklch(0.62 0.19 44)" },
   ];
 
   return (
@@ -393,98 +388,132 @@ function ProductPreview() {
         className="flex items-center justify-between px-5 py-4 border-b"
         style={{ borderColor: "oklch(0.20 0.02 44)" }}
       >
-        <div className="flex items-center gap-2.5">
-          <span className="relative flex h-2 w-2">
-            <span
-              className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-70"
-              style={{ background: "oklch(0.62 0.19 44)" }}
-            />
-            <span
-              className="relative inline-flex rounded-full h-2 w-2"
-              style={{ background: "oklch(0.62 0.19 44)" }}
-            />
-          </span>
-          <span
-            className="text-[11px] font-semibold tracking-wide"
-            style={{ color: "oklch(0.50 0 0)" }}
+        <div>
+          <div
+            className="text-[11px] font-semibold mb-0.5"
+            style={{ color: "oklch(0.92 0.005 55)" }}
           >
-            실시간 · 영어 회화 심화 — A반
-          </span>
+            마케팅 전략 특강
+          </div>
+          <div className="text-[10px]" style={{ color: "oklch(0.38 0 0)" }}>
+            2025.03.28 · 48분 강의
+          </div>
         </div>
-        <div className="flex items-center gap-5">
-          <div className="text-right">
-            <div
-              className="text-sm font-black"
-              style={{ color: "oklch(0.62 0.19 44)" }}
-            >
-              87%
-            </div>
-            <div className="text-[9px]" style={{ color: "oklch(0.38 0 0)" }}>
-              평균 집중도
-            </div>
-          </div>
-          <div className="text-right">
-            <div
-              className="text-sm font-black"
-              style={{ color: "oklch(0.92 0.005 55)" }}
-            >
-              32명
-            </div>
-            <div className="text-[9px]" style={{ color: "oklch(0.38 0 0)" }}>
-              수강 중
-            </div>
-          </div>
+        <div
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
+          style={{ background: "oklch(0.62 0.19 44 / 0.12)", border: "1px solid oklch(0.62 0.19 44 / 0.25)" }}
+        >
+          <span className="text-[10px] font-bold" style={{ color: "oklch(0.42 0 0)" }}>
+            종합 점수
+          </span>
+          <span className="text-base font-black" style={{ color: "oklch(0.72 0.15 44)" }}>
+            87
+          </span>
+          <span className="text-[10px]" style={{ color: "oklch(0.42 0 0)" }}>/ 100</span>
         </div>
       </div>
 
-      {/* Grid */}
-      <div className="p-5">
-        <div className="grid grid-cols-8 gap-1.5 mb-5">
-          {STUDENT_LEVELS.map((level, i) => {
-            const s = levelStyles[level];
-            return (
-              <div
-                key={i}
-                className="aspect-square rounded-md flex items-center justify-center text-[9px] font-bold"
-                style={{
-                  background: s.bg,
-                  border: `1px solid ${s.border}`,
-                  color: s.color,
-                }}
-              >
-                {i + 1}
+      {/* Content */}
+      <div className="p-5 space-y-3">
+        {/* 4-metric grid */}
+        <div className="grid grid-cols-2 gap-2.5">
+          {metrics.map(({ label, value, bar, color }) => (
+            <div
+              key={label}
+              className="rounded-xl p-3"
+              style={{
+                background: "oklch(0.14 0.018 44)",
+                border: "1px solid oklch(0.20 0.02 44)",
+              }}
+            >
+              <div className="text-[10px] mb-1.5" style={{ color: "oklch(0.40 0 0)" }}>
+                {label}
               </div>
-            );
-          })}
+              <div
+                className="text-sm font-black mb-2"
+                style={{ color: "oklch(0.92 0.005 55)" }}
+              >
+                {value}
+              </div>
+              <div
+                className="h-1 rounded-full overflow-hidden"
+                style={{ background: "oklch(0.20 0.02 44)" }}
+              >
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${bar * 100}%`, background: color }}
+                />
+              </div>
+            </div>
+          ))}
         </div>
 
+        {/* Sparkline */}
         <div
-          className="flex items-center justify-between pt-4 border-t"
-          style={{ borderColor: "oklch(0.18 0.02 44)" }}
+          className="rounded-xl p-3"
+          style={{
+            background: "oklch(0.14 0.018 44)",
+            border: "1px solid oklch(0.20 0.02 44)",
+          }}
         >
-          <div className="flex items-center gap-4">
-            {[
-              { label: `집중 ${focused}명`, color: "oklch(0.62 0.19 44)" },
-              { label: `보통 ${normal}명`, color: "oklch(0.70 0.12 80)" },
-              { label: `주의 ${attention}명`, color: "oklch(0.58 0.12 220)" },
-            ].map(({ label, color }) => (
-              <div key={label} className="flex items-center gap-1.5">
-                <div
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: color }}
-                />
-                <span
-                  className="text-[10px] font-medium"
-                  style={{ color: "oklch(0.42 0 0)" }}
-                >
-                  {label}
-                </span>
-              </div>
-            ))}
+          <div className="flex items-center justify-between mb-2.5">
+            <span className="text-[10px] font-semibold" style={{ color: "oklch(0.40 0 0)" }}>
+              청중 집중도 흐름
+            </span>
+            <span className="text-[10px]" style={{ color: "oklch(0.32 0 0)" }}>
+              시작 → 종료
+            </span>
           </div>
-          <span className="text-[10px]" style={{ color: "oklch(0.32 0 0)" }}>
-            3교시 · 42분 경과
-          </span>
+          <svg
+            viewBox={`0 0 ${svgW} ${svgH}`}
+            className="w-full"
+            style={{ height: "48px" }}
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="oklch(0.62 0.19 44)" stopOpacity="0.25" />
+                <stop offset="100%" stopColor="oklch(0.62 0.19 44)" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d={area} fill="url(#areaGrad)" />
+            <path
+              d={line}
+              fill="none"
+              stroke="oklch(0.62 0.19 44)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+
+        {/* Improvement insight */}
+        <div
+          className="rounded-xl p-3 flex items-start gap-2.5"
+          style={{
+            background: "oklch(0.58 0.12 220 / 0.07)",
+            border: "1px solid oklch(0.58 0.12 220 / 0.18)",
+          }}
+        >
+          <div
+            className="w-1.5 h-1.5 rounded-full mt-[5px] shrink-0"
+            style={{ background: "oklch(0.58 0.12 220)" }}
+          />
+          <div>
+            <div
+              className="text-[10px] font-bold mb-0.5"
+              style={{ color: "oklch(0.58 0.12 220)" }}
+            >
+              개선 포인트
+            </div>
+            <div
+              className="text-[11px] leading-relaxed"
+              style={{ color: "oklch(0.48 0 0)" }}
+            >
+              23분~28분 구간에서 집중도가 18% 급락했습니다. 질문 유도나 사례 삽입을 권장합니다.
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -597,103 +626,120 @@ export default function LandingPage() {
             }}
           />
 
-          <div className="relative z-10 text-center max-w-5xl mx-auto w-full">
-            <motion.p
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-[11px] font-bold tracking-[0.22em] uppercase mb-8"
-              style={{ color: "oklch(0.62 0.19 44)" }}
-            >
-              AI 기반 교육 분석 플랫폼
-            </motion.p>
+          <div className="relative z-10 max-w-6xl mx-auto w-full">
 
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.08,
-                duration: 0.8,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="font-black tracking-[-0.04em] mb-6"
-              style={{
-                fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
-                lineHeight: 1.08,
-                color: "oklch(0.96 0.005 55)",
-              }}
-            >
-              가르치는 모든 순간—
-              <br />
-              <span
-                style={{
-                  background:
-                    "linear-gradient(120deg, oklch(0.75 0.17 44), oklch(0.82 0.13 58))",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
+            {/* ── 2-column: 텍스트 | 일러스트 ── */}
+            <div className="flex flex-col lg:flex-row lg:items-center gap-10 xl:gap-16 mb-16">
+
+              {/* Left — text */}
+              <div className="flex-1 text-center lg:text-left">
+                <motion.p
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-[11px] font-bold tracking-[0.22em] uppercase mb-8"
+                  style={{ color: "oklch(0.62 0.19 44)" }}
+                >
+                  온·오프라인 강의 분석 플랫폼
+                </motion.p>
+
+                <motion.h1
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.08, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="font-black tracking-[-0.04em] mb-6"
+                  style={{
+                    fontSize: "clamp(2.6rem, 6vw, 5rem)",
+                    lineHeight: 1.08,
+                    color: "oklch(0.96 0.005 55)",
+                  }}
+                >
+                  청중이 보이면,
+                  <br />
+                  <span
+                    style={{
+                      background:
+                        "linear-gradient(120deg, oklch(0.75 0.17 44), oklch(0.82 0.13 58))",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
+                    강의가 바뀝니다
+                  </span>
+                </motion.h1>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.18, duration: 0.7 }}
+                  className="text-base sm:text-lg leading-relaxed mb-10 mx-auto lg:mx-0"
+                  style={{ color: "oklch(0.46 0 0)", maxWidth: "480px" }}
+                >
+                  오프라인 강의실 카메라 설치부터 온라인 강의 연동까지.
+                  <br className="hidden sm:block" />
+                  청중 집중도·강사 제스처·발표 흐름을 AI가 분석하고,
+                  강의 종료 즉시 개선 리포트를 생성합니다.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.28, duration: 0.6 }}
+                  className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3"
+                >
+                  <a
+                    href="mailto:support@camorix.com"
+                    className="group flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-px"
+                    style={{
+                      background: "oklch(0.62 0.19 44)",
+                      boxShadow: "0 4px 20px oklch(0.62 0.19 44 / 0.4)",
+                    }}
+                  >
+                    도입 문의하기
+                    <ArrowRight
+                      size={14}
+                      className="group-hover:translate-x-0.5 transition-transform"
+                    />
+                  </a>
+                  <a
+                    href="#features"
+                    className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold border transition-all hover:border-white/20"
+                    style={{
+                      color: "oklch(0.55 0 0)",
+                      borderColor: "oklch(0.22 0.02 44)",
+                      background: "oklch(0.13 0.018 44)",
+                    }}
+                  >
+                    기능 살펴보기
+                  </a>
+                </motion.div>
+              </div>
+
+              {/* Right — illustration */}
+              <motion.div
+                initial={{ opacity: 0, x: 32 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.22, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                className="hidden lg:flex items-center justify-center shrink-0"
+                style={{ width: "clamp(300px, 38vw, 500px)" }}
               >
-                데이터로 꿰뚫다
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.18, duration: 0.7 }}
-              className="text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-10"
-              style={{ color: "oklch(0.46 0 0)" }}
-            >
-              학원부터 대학까지, 모든 교육 현장에서.
-              <br className="hidden sm:block" />
-              실시간 집중도 분석부터 AI 수업 리포트까지, 데이터로 수업의 질을
-              높이세요.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.28, duration: 0.6 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-20"
-            >
-              <a
-                href="mailto:support@camorix.com"
-                className="group flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-px"
-                style={{
-                  background: "oklch(0.62 0.19 44)",
-                  boxShadow: "0 4px 20px oklch(0.62 0.19 44 / 0.4)",
-                }}
-              >
-                도입 문의하기
-                <ArrowRight
-                  size={14}
-                  className="group-hover:translate-x-0.5 transition-transform"
+                <img
+                  src="/illust.png"
+                  alt=""
+                  className="w-full h-auto"
+                  style={{ mixBlendMode: "screen" }}
                 />
-              </a>
-              <a
-                href="#features"
-                className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold border transition-all hover:border-white/20"
-                style={{
-                  color: "oklch(0.55 0 0)",
-                  borderColor: "oklch(0.22 0.02 44)",
-                  background: "oklch(0.13 0.018 44)",
-                }}
-              >
-                기능 살펴보기
-              </a>
-            </motion.div>
+              </motion.div>
+            </div>
 
+            {/* ── LectureReport card ── */}
             <motion.div
               initial={{ opacity: 0, y: 48 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.42,
-                duration: 1,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="w-full max-w-2xl mx-auto"
+              transition={{ delay: 0.42, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              className="max-w-2xl mx-auto"
             >
-              <ProductPreview />
+              <LectureReport />
             </motion.div>
           </div>
 
@@ -709,16 +755,16 @@ export default function LandingPage() {
 
         {/* ── Features ── */}
         <section id="features" style={{ background: "oklch(0.978 0.003 60)" }}>
-          <div className="max-w-5xl mx-auto px-6 py-28">
+          <div className="max-w-6xl mx-auto px-6 py-28">
             <FadeIn className="mb-20">
               <Overline>핵심 기능</Overline>
               <h2
                 className="text-3xl sm:text-4xl font-black tracking-[-0.025em]"
                 style={{ color: "oklch(0.15 0.018 45)", lineHeight: 1.2 }}
               >
-                교육의 모든 순간을
+                강의를 개선하려면
                 <br />
-                데이터로 이해하세요
+                먼저 데이터가 필요합니다
               </h2>
             </FadeIn>
 
@@ -727,25 +773,25 @@ export default function LandingPage() {
                 {
                   num: "01",
                   icon: <Monitor size={18} />,
-                  title: "실시간 집중도 모니터링",
+                  title: "강의실 카메라로 청중 전체를 실시간 분석합니다",
                   description:
-                    "카메라 없이도 학생 한 명 한 명의 집중 상태와 감정을 실시간으로 분석합니다. 이상 신호 감지 시 즉각 알림을 제공하여 강의 도중 빠르게 대응할 수 있습니다.",
+                    "오프라인 강의실에 카메라를 설치하면, 32명의 청중이 지금 얼마나 집중하고 있는지 한눈에 보입니다. 집중도가 떨어지는 구간을 실시간으로 감지해 강의 중 즉각 대응할 수 있습니다.",
                   accent: "oklch(0.62 0.19 44)",
                 },
                 {
                   num: "02",
                   icon: <Brain size={18} />,
-                  title: "AI 강의 품질 분석",
+                  title: "강사의 전달력을 AI가 객관적으로 평가합니다",
                   description:
-                    "강의 흐름, 설명 속도, 질문 빈도를 AI가 자동으로 분석합니다. 강의 품질 점수와 함께 구체적인 개선 방향을 제안하여 다음 강의를 한 단계 높이세요.",
+                    "말하는 속도, 시선 분배, 제스처, 질문 빈도—강사의 발표 방식을 AI가 정량 분석합니다. \"잘 가르쳤나\"를 막연히 느끼는 대신, 수치로 확인하고 다음 강의에서 정확히 개선하세요.",
                   accent: "oklch(0.52 0.18 200)",
                 },
                 {
                   num: "03",
                   icon: <BarChart3 size={18} />,
-                  title: "스마트 리포트 자동 생성",
+                  title: "강의 종료 즉시, 개선 리포트가 완성됩니다",
                   description:
-                    "수업 종료 즉시 학생별 참여도, 이해도, 집중 패턴을 담은 리포트가 자동으로 생성됩니다. 개별 피드백부터 누적 수업 트렌드까지 한눈에 파악하세요.",
+                    "강의가 끝나면 분석 API가 자동으로 리포트를 생성합니다. 청중 집중도 추이, 강사 전달력 점수, 구간별 피드백까지—다음 강의를 위한 구체적인 개선점이 정리되어 전달됩니다.",
                   accent: "oklch(0.60 0.17 80)",
                 },
               ].map(({ num, icon, title, description, accent }, i) => (
@@ -808,13 +854,13 @@ export default function LandingPage() {
 
         {/* ── Stats ── */}
         <section style={{ background: "oklch(0.11 0.018 44)" }}>
-          <div className="max-w-5xl mx-auto px-6 py-20">
+          <div className="max-w-6xl mx-auto px-6 py-20">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
               {[
                 {
                   value: 3000,
                   suffix: "+",
-                  label: "수강 학생",
+                  label: "분석된 청중",
                   sub: "누적 기준",
                 },
                 {
@@ -826,14 +872,14 @@ export default function LandingPage() {
                 {
                   value: 50,
                   suffix: "+",
-                  label: "연계 수업",
-                  sub: "현재 운영 중",
+                  label: "분석 완료 강의",
+                  sub: "누적 기준",
                 },
                 {
                   value: 12,
                   suffix: "개",
-                  label: "교육 기관",
-                  sub: "도입 완료",
+                  label: "도입 기관",
+                  sub: "현재 운영 중",
                 },
               ].map(({ value, suffix, label, sub }, i) => (
                 <FadeIn key={label} delay={i * 0.07}>
@@ -865,16 +911,16 @@ export default function LandingPage() {
 
         {/* ── How it works ── */}
         <section id="how-it-works" style={{ background: "oklch(1 0 0)" }}>
-          <div className="max-w-5xl mx-auto px-6 py-28">
+          <div className="max-w-6xl mx-auto px-6 py-28">
             <FadeIn className="mb-20">
               <Overline>시작하기</Overline>
               <h2
                 className="text-3xl sm:text-4xl font-black tracking-[-0.025em]"
                 style={{ color: "oklch(0.15 0.018 45)", lineHeight: 1.2 }}
               >
-                3단계로 완성하는
+                3단계로 시작하는
                 <br />
-                스마트 수업
+                강의 개선
               </h2>
             </FadeIn>
 
@@ -890,23 +936,23 @@ export default function LandingPage() {
               {[
                 {
                   step: 1,
-                  title: "강의 등록",
+                  title: "환경 연동",
                   description:
-                    "과목명, 일정, 참여 학생을 등록하면 즉시 수업 환경이 준비됩니다.",
+                    "오프라인 강의실에 카메라를 설치하거나, 온라인 강의 플랫폼을 연동하세요. 초기 설정은 당일 완료됩니다.",
                   icon: <Users size={17} />,
                 },
                 {
                   step: 2,
-                  title: "실시간 모니터링",
+                  title: "강의 중 실시간 분석",
                   description:
-                    "대시보드에서 학생별 집중 상태를 확인하고 즉각 대응하세요.",
+                    "강의가 진행되는 동안 AI가 청중 집중도와 강사의 전달력을 자동으로 측정합니다. 대시보드에서 현황을 확인하세요.",
                   icon: <Monitor size={17} />,
                 },
                 {
                   step: 3,
-                  title: "리포트 확인",
+                  title: "개선 리포트 수령",
                   description:
-                    "AI가 자동 생성한 분석 리포트로 다음 강의를 개선하세요.",
+                    "강의 종료 후 분석 API가 리포트를 자동 생성합니다. 다음 강의에서 무엇을 바꿔야 할지 구체적으로 알 수 있습니다.",
                   icon: <BarChart3 size={17} />,
                 },
               ].map(({ step, title, description, icon }, i) => (
@@ -952,7 +998,7 @@ export default function LandingPage() {
 
         {/* ── CTA ── */}
         <section style={{ background: "oklch(0.09 0.018 44)" }}>
-          <div className="relative max-w-5xl mx-auto px-6 py-28 text-center overflow-hidden">
+          <div className="relative max-w-6xl mx-auto px-6 py-28 text-center overflow-hidden">
             <DotGrid />
             <div
               className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px]"
@@ -971,18 +1017,17 @@ export default function LandingPage() {
                   color: "oklch(0.96 0.005 55)",
                 }}
               >
-                더 나은 수업의 시작,
+                더 나은 강의는
                 <br />
-                <span style={{ color: "oklch(0.72 0.17 44)" }}>PREMIND</span>와
-                함께
+                <span style={{ color: "oklch(0.72 0.17 44)" }}>데이터에서</span> 시작됩니다
               </h2>
               <p
                 className="text-base max-w-sm mx-auto mb-10 leading-relaxed"
                 style={{ color: "oklch(0.44 0 0)" }}
               >
-                학생들의 성장을 데이터로 증명하고,
+                지금 강의가 얼마나 잘 전달되는지 모른다면,
                 <br />
-                모든 수업의 가능성을 한 단계 높이세요.
+                개선도 불가능합니다. PREMIND가 첫 번째 데이터를 만들어 드립니다.
               </p>
               <a
                 href="mailto:support@camorix.com"
@@ -1009,7 +1054,7 @@ export default function LandingPage() {
             borderTop: "1px solid oklch(0.16 0.02 44)",
           }}
         >
-          <div className="max-w-5xl mx-auto px-6 py-10 flex flex-col gap-6">
+          <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col gap-6">
             {/* Top row */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-2.5">
