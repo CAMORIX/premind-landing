@@ -9,7 +9,15 @@ import {
   useSpring,
   AnimatePresence,
 } from "motion/react";
-import { ArrowRight, BarChart3, Brain, Check, Monitor, Users, X } from "lucide-react";
+import {
+  ArrowRight,
+  BarChart3,
+  Brain,
+  Check,
+  Monitor,
+  Users,
+  X,
+} from "lucide-react";
 import { ReactLenis, useLenis } from "lenis/react";
 
 /* ────────────────────────────────────────
@@ -37,9 +45,15 @@ function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const lenis = useLenis();
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
     e.preventDefault();
-    lenis?.scrollTo(href, { duration: 1.4, easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    lenis?.scrollTo(href, {
+      duration: 1.4,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
     setMobileOpen(false);
   };
 
@@ -213,7 +227,10 @@ function Navbar() {
                     <motion.span
                       key={href}
                       className="absolute -bottom-[3px] left-1/2 w-1 h-1 rounded-full"
-                      style={{ background: "oklch(0.62 0.19 44)", translateX: "-50%" }}
+                      style={{
+                        background: "oklch(0.62 0.19 44)",
+                        translateX: "-50%",
+                      }}
                       initial={{ opacity: 0, scale: 0 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0 }}
@@ -354,26 +371,51 @@ function LectureReport() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const data = [72, 78, 82, 85, 88, 91, 89, 87, 73, 65, 68, 75, 83, 87, 90, 88, 86, 87, 89, 91];
+  const data = [
+    72, 78, 82, 85, 88, 91, 89, 87, 73, 65, 68, 75, 83, 87, 90, 88, 86, 87, 89,
+    91,
+  ];
   const svgW = 200;
   const svgH = 48;
   const min = Math.min(...data);
   const max = Math.max(...data);
   const pts = data.map((v, i) => {
     const x = (i / (data.length - 1)) * svgW;
-    const y = (svgH - 4) - ((v - min) / (max - min)) * (svgH - 10);
+    const y = svgH - 4 - ((v - min) / (max - min)) * (svgH - 10);
     return [x, y] as [number, number];
   });
   const line = pts
-    .map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)},${y.toFixed(1)}`)
+    .map(
+      ([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)},${y.toFixed(1)}`,
+    )
     .join(" ");
   const area = `${line} L ${svgW},${svgH} L 0,${svgH} Z`;
 
   const metrics = [
-    { label: "청중 집중도", value: "91%", bar: 0.91, color: "oklch(0.62 0.19 44)" },
-    { label: "강사 전달력", value: "8.4 / 10", bar: 0.84, color: "oklch(0.52 0.18 200)" },
-    { label: "제스처 활용", value: "적극적", bar: 0.78, color: "oklch(0.60 0.17 80)" },
-    { label: "발표 속도", value: "적정 범위", bar: 0.88, color: "oklch(0.62 0.19 44)" },
+    {
+      label: "청중 집중도",
+      value: "91%",
+      bar: 0.91,
+      color: "oklch(0.62 0.19 44)",
+    },
+    {
+      label: "강사 전달력",
+      value: "8.4 / 10",
+      bar: 0.84,
+      color: "oklch(0.52 0.18 200)",
+    },
+    {
+      label: "제스처 활용",
+      value: "적극적",
+      bar: 0.78,
+      color: "oklch(0.60 0.17 80)",
+    },
+    {
+      label: "발표 속도",
+      value: "적정 범위",
+      bar: 0.88,
+      color: "oklch(0.62 0.19 44)",
+    },
   ];
 
   return (
@@ -405,15 +447,26 @@ function LectureReport() {
         </div>
         <div
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
-          style={{ background: "oklch(0.62 0.19 44 / 0.12)", border: "1px solid oklch(0.62 0.19 44 / 0.25)" }}
+          style={{
+            background: "oklch(0.62 0.19 44 / 0.12)",
+            border: "1px solid oklch(0.62 0.19 44 / 0.25)",
+          }}
         >
-          <span className="text-[10px] font-bold" style={{ color: "oklch(0.42 0 0)" }}>
+          <span
+            className="text-[10px] font-bold"
+            style={{ color: "oklch(0.42 0 0)" }}
+          >
             종합 점수
           </span>
-          <span className="text-base font-black" style={{ color: "oklch(0.72 0.15 44)" }}>
+          <span
+            className="text-base font-black"
+            style={{ color: "oklch(0.72 0.15 44)" }}
+          >
             87
           </span>
-          <span className="text-[10px]" style={{ color: "oklch(0.42 0 0)" }}>/ 100</span>
+          <span className="text-[10px]" style={{ color: "oklch(0.42 0 0)" }}>
+            / 100
+          </span>
         </div>
       </div>
 
@@ -430,7 +483,10 @@ function LectureReport() {
                 border: "1px solid oklch(0.20 0.02 44)",
               }}
             >
-              <div className="text-[10px] mb-1.5" style={{ color: "oklch(0.40 0 0)" }}>
+              <div
+                className="text-[10px] mb-1.5"
+                style={{ color: "oklch(0.40 0 0)" }}
+              >
                 {label}
               </div>
               <div
@@ -447,8 +503,14 @@ function LectureReport() {
                   className="h-full rounded-full"
                   style={{ background: color }}
                   initial={{ width: "0%" }}
-                  animate={inView ? { width: `${bar * 100}%` } : { width: "0%" }}
-                  transition={{ duration: 0.7, delay: 0.2 + idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  animate={
+                    inView ? { width: `${bar * 100}%` } : { width: "0%" }
+                  }
+                  transition={{
+                    duration: 0.7,
+                    delay: 0.2 + idx * 0.1,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                 />
               </div>
             </div>
@@ -464,7 +526,10 @@ function LectureReport() {
           }}
         >
           <div className="flex items-center justify-between mb-2.5">
-            <span className="text-[10px] font-semibold" style={{ color: "oklch(0.40 0 0)" }}>
+            <span
+              className="text-[10px] font-semibold"
+              style={{ color: "oklch(0.40 0 0)" }}
+            >
               청중 집중도 흐름
             </span>
             <span className="text-[10px]" style={{ color: "oklch(0.32 0 0)" }}>
@@ -479,8 +544,16 @@ function LectureReport() {
           >
             <defs>
               <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="oklch(0.62 0.19 44)" stopOpacity="0.25" />
-                <stop offset="100%" stopColor="oklch(0.62 0.19 44)" stopOpacity="0" />
+                <stop
+                  offset="0%"
+                  stopColor="oklch(0.62 0.19 44)"
+                  stopOpacity="0.25"
+                />
+                <stop
+                  offset="100%"
+                  stopColor="oklch(0.62 0.19 44)"
+                  stopOpacity="0"
+                />
               </linearGradient>
             </defs>
             <motion.path
@@ -498,7 +571,11 @@ function LectureReport() {
               strokeLinecap="round"
               strokeLinejoin="round"
               initial={{ pathLength: 0, opacity: 0 }}
-              animate={inView ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
+              animate={
+                inView
+                  ? { pathLength: 1, opacity: 1 }
+                  : { pathLength: 0, opacity: 0 }
+              }
               transition={{ duration: 1.4, delay: 0.5, ease: "easeInOut" }}
             />
           </svg>
@@ -527,7 +604,8 @@ function LectureReport() {
               className="text-[11px] leading-relaxed"
               style={{ color: "oklch(0.48 0 0)" }}
             >
-              23분~28분 구간에서 집중도가 18% 급락했습니다. 질문 유도나 사례 삽입을 권장합니다.
+              23분~28분 구간에서 집중도가 18% 급락했습니다. 질문 유도나 사례
+              삽입을 권장합니다.
             </div>
           </div>
         </div>
@@ -624,19 +702,28 @@ function FeaturesSection() {
   const [hovered, setHovered] = useState<string | null>(null);
   const features = [
     {
-      num: "01", icon: <Monitor size={18} />, accent: "oklch(0.62 0.19 44)",
+      num: "01",
+      icon: <Monitor size={18} />,
+      accent: "oklch(0.62 0.19 44)",
       title: "강의실 카메라로 청중 전체를 실시간 분석합니다",
-      description: "오프라인 강의실에 카메라를 설치하면, 32명의 청중이 지금 얼마나 집중하고 있는지 한눈에 보입니다. 집중도가 떨어지는 구간을 실시간으로 감지해 강의 중 즉각 대응할 수 있습니다.",
+      description:
+        "오프라인 강의실에 카메라를 설치하면, 32명의 청중이 지금 얼마나 집중하고 있는지 한눈에 보입니다. 집중도가 떨어지는 구간을 실시간으로 감지해 강의 중 즉각 대응할 수 있습니다.",
     },
     {
-      num: "02", icon: <Brain size={18} />, accent: "oklch(0.52 0.18 200)",
+      num: "02",
+      icon: <Brain size={18} />,
+      accent: "oklch(0.52 0.18 200)",
       title: "강사의 전달력을 AI가 객관적으로 평가합니다",
-      description: "말하는 속도, 시선 분배, 제스처, 질문 빈도—강사의 발표 방식을 AI가 정량 분석합니다. \"잘 가르쳤나\"를 막연히 느끼는 대신, 수치로 확인하고 다음 강의에서 정확히 개선하세요.",
+      description:
+        '말하는 속도, 시선 분배, 제스처, 질문 빈도—강사의 발표 방식을 AI가 정량 분석합니다. "잘 가르쳤나"를 막연히 느끼는 대신, 수치로 확인하고 다음 강의에서 정확히 개선하세요.',
     },
     {
-      num: "03", icon: <BarChart3 size={18} />, accent: "oklch(0.60 0.17 80)",
+      num: "03",
+      icon: <BarChart3 size={18} />,
+      accent: "oklch(0.60 0.17 80)",
       title: "강의 종료 즉시, 개선 리포트가 완성됩니다",
-      description: "강의가 끝나면 분석 API가 자동으로 리포트를 생성합니다. 청중 집중도 추이, 강사 전달력 점수, 구간별 피드백까지—다음 강의를 위한 구체적인 개선점이 정리되어 전달됩니다.",
+      description:
+        "강의가 끝나면 분석 API가 자동으로 리포트를 생성합니다. 청중 집중도 추이, 강사 전달력 점수, 구간별 피드백까지—다음 강의를 위한 구체적인 개선점이 정리되어 전달됩니다.",
     },
   ];
   return (
@@ -644,8 +731,13 @@ function FeaturesSection() {
       <div className="max-w-6xl mx-auto px-6 py-28">
         <FadeIn className="mb-20">
           <Overline>핵심 기능</Overline>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-[-0.025em]" style={{ color: "oklch(0.15 0.018 45)", lineHeight: 1.2 }}>
-            강의를 개선하려면<br />먼저 데이터가 필요합니다
+          <h2
+            className="text-3xl sm:text-4xl font-black tracking-[-0.025em]"
+            style={{ color: "oklch(0.15 0.018 45)", lineHeight: 1.2 }}
+          >
+            강의를 개선하려면
+            <br />
+            먼저 데이터가 필요합니다
           </h2>
         </FadeIn>
         <div>
@@ -673,7 +765,9 @@ function FeaturesSection() {
                 </AnimatePresence>
                 <span
                   className="text-3xl font-black leading-none tabular-nums select-none pt-0.5 transition-colors duration-200"
-                  style={{ color: hovered === num ? accent : "oklch(0.86 0.008 55)" }}
+                  style={{
+                    color: hovered === num ? accent : "oklch(0.86 0.008 55)",
+                  }}
                 >
                   {num}
                 </span>
@@ -681,20 +775,30 @@ function FeaturesSection() {
                   <div className="flex items-center gap-2.5 mb-3">
                     <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200"
-                      style={{ background: hovered === num ? `${accent}28` : `${accent}16`, color: accent }}
+                      style={{
+                        background:
+                          hovered === num ? `${accent}28` : `${accent}16`,
+                        color: accent,
+                      }}
                     >
                       {icon}
                     </div>
                     <h3
                       className="text-lg font-black transition-colors duration-200"
-                      style={{ color: hovered === num ? accent : "oklch(0.15 0.018 45)" }}
+                      style={{
+                        color:
+                          hovered === num ? accent : "oklch(0.15 0.018 45)",
+                      }}
                     >
                       {title}
                     </h3>
                   </div>
                   <motion.p
                     className="text-sm leading-[1.85]"
-                    animate={{ x: hovered === num ? 3 : 0, opacity: hovered === num ? 1 : 0.65 }}
+                    animate={{
+                      x: hovered === num ? 3 : 0,
+                      opacity: hovered === num ? 1 : 0.65,
+                    }}
                     transition={{ duration: 0.2 }}
                     style={{ color: "oklch(0.48 0 0)", maxWidth: "580px" }}
                   >
@@ -710,7 +814,10 @@ function FeaturesSection() {
                       exit={{ opacity: 0, x: -6 }}
                       transition={{ duration: 0.15 }}
                     >
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center border" style={{ borderColor: accent, color: accent }}>
+                      <div
+                        className="w-8 h-8 rounded-full flex items-center justify-center border"
+                        style={{ borderColor: accent, color: accent }}
+                      >
                         <ArrowRight size={12} />
                       </div>
                     </motion.div>
@@ -719,7 +826,10 @@ function FeaturesSection() {
               </div>
             </FadeIn>
           ))}
-          <div className="border-t" style={{ borderColor: "oklch(0.88 0.006 55)" }} />
+          <div
+            className="border-t"
+            style={{ borderColor: "oklch(0.88 0.006 55)" }}
+          />
         </div>
       </div>
     </section>
@@ -733,9 +843,27 @@ function HowItWorksSteps() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const steps = [
-    { step: 1, title: "환경 연동", icon: <Users size={17} />, description: "오프라인 강의실에 카메라를 설치하거나, 온라인 강의 플랫폼을 연동하세요. 초기 설정은 당일 완료됩니다." },
-    { step: 2, title: "강의 중 실시간 분석", icon: <Monitor size={17} />, description: "강의가 진행되는 동안 AI가 청중 집중도와 강사의 전달력을 자동으로 측정합니다. 대시보드에서 현황을 확인하세요." },
-    { step: 3, title: "개선 리포트 수령", icon: <BarChart3 size={17} />, description: "강의 종료 후 분석 API가 리포트를 자동 생성합니다. 다음 강의에서 무엇을 바꿔야 할지 구체적으로 알 수 있습니다." },
+    {
+      step: 1,
+      title: "환경 연동",
+      icon: <Users size={17} />,
+      description:
+        "오프라인 강의실에 카메라를 설치하거나, 온라인 강의 플랫폼을 연동하세요. 초기 설정은 당일 완료됩니다.",
+    },
+    {
+      step: 2,
+      title: "강의 중 실시간 분석",
+      icon: <Monitor size={17} />,
+      description:
+        "강의가 진행되는 동안 AI가 청중 집중도와 강사의 전달력을 자동으로 측정합니다. 대시보드에서 현황을 확인하세요.",
+    },
+    {
+      step: 3,
+      title: "개선 리포트 수령",
+      icon: <BarChart3 size={17} />,
+      description:
+        "강의 종료 후 분석 API가 리포트를 자동 생성합니다. 다음 강의에서 무엇을 바꿔야 할지 구체적으로 알 수 있습니다.",
+    },
   ];
   return (
     <div ref={ref} className="relative grid grid-cols-1 md:grid-cols-3 gap-14">
@@ -743,7 +871,10 @@ function HowItWorksSteps() {
       <div className="hidden md:block absolute top-[18px] left-[calc(16.5%+20px)] right-[calc(16.5%+20px)] h-px overflow-hidden">
         <motion.div
           className="h-full w-full"
-          style={{ borderTop: "1.5px dashed oklch(0.62 0.19 44 / 0.45)", originX: 0 }}
+          style={{
+            borderTop: "1.5px dashed oklch(0.62 0.19 44 / 0.45)",
+            originX: 0,
+          }}
           initial={{ scaleX: 0 }}
           animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
           transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
@@ -754,24 +885,52 @@ function HowItWorksSteps() {
           key={step}
           initial={{ opacity: 0, y: 18 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 0.6,
+            delay: i * 0.15,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           <div className="relative w-10 h-10 mb-6">
             <motion.div
               className="w-10 h-10 rounded-xl flex items-center justify-center"
               initial={{ scale: 0.5, opacity: 0 }}
-              animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 380, damping: 18, delay: 0.35 + i * 0.15 }}
-              style={{ background: "oklch(0.97 0.003 60)", border: "1px solid oklch(0.88 0.006 55)", color: "oklch(0.62 0.19 44)" }}
+              animate={
+                inView ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0 }
+              }
+              transition={{
+                type: "spring",
+                stiffness: 380,
+                damping: 18,
+                delay: 0.35 + i * 0.15,
+              }}
+              style={{
+                background: "oklch(0.97 0.003 60)",
+                border: "1px solid oklch(0.88 0.006 55)",
+                color: "oklch(0.62 0.19 44)",
+              }}
             >
               {icon}
             </motion.div>
-            <span className="absolute -top-1.5 -right-1.5 w-[18px] h-[18px] rounded-full text-[9px] font-black text-white flex items-center justify-center" style={{ background: "oklch(0.62 0.19 44)" }}>
+            <span
+              className="absolute -top-1.5 -right-1.5 w-[18px] h-[18px] rounded-full text-[9px] font-black text-white flex items-center justify-center"
+              style={{ background: "oklch(0.62 0.19 44)" }}
+            >
               {step}
             </span>
           </div>
-          <h3 className="text-base font-black mb-2" style={{ color: "oklch(0.15 0.018 45)" }}>{title}</h3>
-          <p className="text-sm leading-relaxed" style={{ color: "oklch(0.50 0 0)" }}>{description}</p>
+          <h3
+            className="text-base font-black mb-2"
+            style={{ color: "oklch(0.15 0.018 45)" }}
+          >
+            {title}
+          </h3>
+          <p
+            className="text-sm leading-relaxed"
+            style={{ color: "oklch(0.50 0 0)" }}
+          >
+            {description}
+          </p>
         </motion.div>
       ))}
     </div>
@@ -785,11 +944,36 @@ function ComparisonTable() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const rows = [
-    { label: "오프라인 강의실 카메라 분석", icon: <Monitor size={14} />, competitor: false, highlight: true },
-    { label: "온라인 강의 분석",             icon: <Monitor size={14} />, competitor: true,  highlight: false },
-    { label: "실시간 청중 집중도 측정",       icon: <Users size={14} />,   competitor: false, highlight: false },
-    { label: "강사 제스처·전달력 분석",       icon: <Brain size={14} />,   competitor: false, highlight: false },
-    { label: "강의 종료 후 AI 리포트 자동 생성", icon: <BarChart3 size={14} />, competitor: false, highlight: false },
+    {
+      label: "오프라인 강의실 카메라 분석",
+      icon: <Monitor size={14} />,
+      competitor: false,
+      highlight: true,
+    },
+    {
+      label: "온라인 강의 분석",
+      icon: <Monitor size={14} />,
+      competitor: true,
+      highlight: false,
+    },
+    {
+      label: "실시간 청중 집중도 측정",
+      icon: <Users size={14} />,
+      competitor: false,
+      highlight: false,
+    },
+    {
+      label: "강사 제스처·전달력 분석",
+      icon: <Brain size={14} />,
+      competitor: false,
+      highlight: false,
+    },
+    {
+      label: "강의 종료 후 AI 리포트 자동 생성",
+      icon: <BarChart3 size={14} />,
+      competitor: false,
+      highlight: false,
+    },
   ];
   return (
     <div ref={ref} className="max-w-2xl mx-auto">
@@ -803,15 +987,29 @@ function ComparisonTable() {
       >
         <div />
         <div className="flex items-center justify-center py-2">
-          <span className="text-xs font-semibold" style={{ color: "oklch(0.55 0 0)" }}>타사</span>
+          <span
+            className="text-xs font-semibold"
+            style={{ color: "oklch(0.55 0 0)" }}
+          >
+            타사
+          </span>
         </div>
-        <div className="flex items-center justify-center py-2 rounded-t-xl" style={{ background: "oklch(0.62 0.19 44)" }}>
+        <div
+          className="flex items-center justify-center py-2 rounded-t-xl"
+          style={{ background: "oklch(0.62 0.19 44)" }}
+        >
           <span className="text-xs font-black text-white">프리마인드</span>
         </div>
       </motion.div>
 
       {/* Table body */}
-      <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid oklch(0.88 0.006 55)", background: "oklch(1 0 0)" }}>
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          border: "1px solid oklch(0.88 0.006 55)",
+          background: "oklch(1 0 0)",
+        }}
+      >
         {rows.map(({ label, icon, competitor, highlight }, i) => (
           <motion.div
             key={label}
@@ -819,11 +1017,17 @@ function ComparisonTable() {
             style={{
               gridTemplateColumns: "1fr 72px 100px",
               borderTop: i > 0 ? "1px solid oklch(0.93 0.004 55)" : undefined,
-              background: highlight ? "oklch(0.62 0.19 44 / 0.03)" : "transparent",
+              background: highlight
+                ? "oklch(0.62 0.19 44 / 0.03)"
+                : "transparent",
             }}
             initial={{ opacity: 0, x: -14 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.45, delay: 0.1 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.45,
+              delay: 0.1 + i * 0.07,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             {/* Feature label */}
             <div className="px-4 py-4 flex items-start sm:items-center gap-2">
@@ -835,28 +1039,52 @@ function ComparisonTable() {
                   핵심
                 </span>
               )}
-              <span className="shrink-0 hidden sm:block" style={{ color: "oklch(0.62 0.19 44 / 0.55)" }}>{icon}</span>
+              <span
+                className="shrink-0 hidden sm:block"
+                style={{ color: "oklch(0.62 0.19 44 / 0.55)" }}
+              >
+                {icon}
+              </span>
               <span
                 className="text-xs sm:text-sm leading-snug"
-                style={{ color: "oklch(0.22 0.018 45)", fontWeight: highlight ? 600 : 400 }}
+                style={{
+                  color: "oklch(0.22 0.018 45)",
+                  fontWeight: highlight ? 600 : 400,
+                }}
               >
                 {label}
               </span>
             </div>
 
             {/* Competitor */}
-            <div className="py-4 flex items-center justify-center" style={{ borderLeft: "1px solid oklch(0.93 0.004 55)" }}>
+            <div
+              className="py-4 flex items-center justify-center"
+              style={{ borderLeft: "1px solid oklch(0.93 0.004 55)" }}
+            >
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
-                animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 480, damping: 22, delay: 0.2 + i * 0.07 }}
+                animate={
+                  inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }
+                }
+                transition={{
+                  type: "spring",
+                  stiffness: 480,
+                  damping: 22,
+                  delay: 0.2 + i * 0.07,
+                }}
               >
                 {competitor ? (
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "oklch(0.93 0 0)" }}>
+                  <div
+                    className="w-6 h-6 rounded-full flex items-center justify-center"
+                    style={{ background: "oklch(0.93 0 0)" }}
+                  >
                     <Check size={12} style={{ color: "oklch(0.58 0 0)" }} />
                   </div>
                 ) : (
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "oklch(0.96 0 0)" }}>
+                  <div
+                    className="w-6 h-6 rounded-full flex items-center justify-center"
+                    style={{ background: "oklch(0.96 0 0)" }}
+                  >
                     <X size={12} style={{ color: "oklch(0.76 0 0)" }} />
                   </div>
                 )}
@@ -868,13 +1096,22 @@ function ComparisonTable() {
               className="py-4 flex items-center justify-center"
               style={{
                 borderLeft: "1px solid oklch(0.88 0.006 55)",
-                background: highlight ? "oklch(0.62 0.19 44 / 0.10)" : "oklch(0.62 0.19 44 / 0.05)",
+                background: highlight
+                  ? "oklch(0.62 0.19 44 / 0.10)"
+                  : "oklch(0.62 0.19 44 / 0.05)",
               }}
             >
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
-                animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 480, damping: 22, delay: 0.28 + i * 0.07 }}
+                animate={
+                  inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }
+                }
+                transition={{
+                  type: "spring",
+                  stiffness: 480,
+                  damping: 22,
+                  delay: 0.28 + i * 0.07,
+                }}
               >
                 <div
                   className="w-6 h-6 rounded-full flex items-center justify-center text-white"
@@ -903,7 +1140,11 @@ function OfflineScene() {
 
   const shots = [
     { src: "/teacher.png", label: "강사 동선·제스처 추적", badge: "강사 분석" },
-    { src: "/students.png", label: "청중 집중도 실시간 감지", badge: "청중 분석" },
+    {
+      src: "/students.png",
+      label: "청중 집중도 실시간 감지",
+      badge: "청중 분석",
+    },
   ];
 
   return (
@@ -920,9 +1161,9 @@ function OfflineScene() {
             className="text-3xl sm:text-4xl font-black tracking-[-0.025em]"
             style={{ color: "oklch(0.96 0.005 55)", lineHeight: 1.2 }}
           >
-            카메라 한 대로
+            카메라로
             <br />
-            강의실 전체를 읽습니다
+            강의실을 읽습니다
           </h2>
         </motion.div>
 
@@ -932,26 +1173,36 @@ function OfflineScene() {
               key={src}
               initial={{ opacity: 0, y: 28 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.6,
+                delay: i * 0.15,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="relative rounded-2xl overflow-hidden"
               style={{ border: "1px solid oklch(0.20 0.015 44)" }}
             >
-              <img
-                src={src}
-                alt={label}
-                className="w-full h-auto block"
-              />
+              <img src={src} alt={label} className="w-full h-auto block" />
               {/* Label */}
               <div
                 className="absolute bottom-0 left-0 right-0 px-5 py-4"
-                style={{ background: "linear-gradient(to top, oklch(0.05 0.01 44 / 0.9) 0%, transparent 100%)" }}
+                style={{
+                  background:
+                    "linear-gradient(to top, oklch(0.05 0.01 44 / 0.9) 0%, transparent 100%)",
+                }}
               >
-                <span className="text-xs font-bold px-2 py-0.5 rounded-md mr-2"
-                  style={{ background: "oklch(0.62 0.19 44 / 0.25)", color: "oklch(0.80 0.12 44)" }}
+                <span
+                  className="text-xs font-bold px-2 py-0.5 rounded-md mr-2"
+                  style={{
+                    background: "oklch(0.62 0.19 44 / 0.25)",
+                    color: "oklch(0.80 0.12 44)",
+                  }}
                 >
                   {badge}
                 </span>
-                <span className="text-sm font-semibold" style={{ color: "oklch(0.90 0 0)" }}>
+                <span
+                  className="text-sm font-semibold"
+                  style={{ color: "oklch(0.90 0 0)" }}
+                >
                   {label}
                 </span>
               </div>
@@ -1061,14 +1312,26 @@ function ProductScreenshots() {
             style={{ borderColor: "oklch(0.22 0.015 44)" }}
           >
             <div className="flex gap-1.5 shrink-0">
-              <div className="w-3 h-3 rounded-full" style={{ background: "oklch(0.65 0.18 25)" }} />
-              <div className="w-3 h-3 rounded-full" style={{ background: "oklch(0.75 0.16 80)" }} />
-              <div className="w-3 h-3 rounded-full" style={{ background: "oklch(0.65 0.18 145)" }} />
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ background: "oklch(0.65 0.18 25)" }}
+              />
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ background: "oklch(0.75 0.16 80)" }}
+              />
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ background: "oklch(0.65 0.18 145)" }}
+              />
             </div>
             <div className="flex-1 flex justify-center px-2">
               <div
                 className="w-full max-w-[240px] rounded-md px-3 py-1 text-xs text-center"
-                style={{ background: "oklch(0.20 0.015 44)", color: "oklch(0.45 0 0)" }}
+                style={{
+                  background: "oklch(0.20 0.015 44)",
+                  color: "oklch(0.45 0 0)",
+                }}
               >
                 app.premind.ai
               </div>
@@ -1076,7 +1339,10 @@ function ProductScreenshots() {
           </div>
 
           {/* Screenshot */}
-          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "16/9" }}>
+          <div
+            className="relative w-full overflow-hidden"
+            style={{ aspectRatio: "16/9" }}
+          >
             <AnimatePresence mode="wait">
               {SCREENS.map(
                 (s) =>
@@ -1091,7 +1357,7 @@ function ProductScreenshots() {
                       exit={{ opacity: 0, scale: 0.985 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     />
-                  )
+                  ),
               )}
             </AnimatePresence>
           </div>
@@ -1154,10 +1420,8 @@ export default function LandingPage() {
           </div>
 
           <div className="relative z-10 max-w-6xl mx-auto w-full">
-
             {/* ── 2-column: 텍스트 | 일러스트 ── */}
             <div className="flex flex-col lg:flex-row lg:items-center gap-10 xl:gap-16 mb-16">
-
               {/* Left — text */}
               <div className="flex-1 text-center lg:text-left">
                 <motion.p
@@ -1173,7 +1437,11 @@ export default function LandingPage() {
                 <motion.h1
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.08, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{
+                    delay: 0.08,
+                    duration: 0.8,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                   className="font-black tracking-[-0.04em] mb-6"
                   style={{
                     fontSize: "clamp(2.6rem, 6vw, 5rem)",
@@ -1204,8 +1472,8 @@ export default function LandingPage() {
                 >
                   오프라인 강의실 카메라 설치부터 온라인 강의 연동까지.
                   <br className="hidden sm:block" />
-                  청중 집중도·강사 제스처·발표 흐름을 AI가 분석하고,
-                  강의 종료 즉시 개선 리포트를 생성합니다.
+                  청중 집중도·강사 제스처·발표 흐름을 AI가 분석하고, 강의 종료
+                  즉시 개선 리포트를 생성합니다.
                 </motion.p>
 
                 <motion.div
@@ -1246,15 +1514,28 @@ export default function LandingPage() {
               {/* Outer: parallax / Inner: entry animation */}
               <motion.div
                 className="hidden lg:flex items-center justify-center shrink-0"
-                style={{ width: "clamp(300px, 38vw, 500px)", x: illustX, y: illustY }}
+                style={{
+                  width: "clamp(300px, 38vw, 500px)",
+                  x: illustX,
+                  y: illustY,
+                }}
               >
                 <motion.div
                   initial={{ opacity: 0, x: 32 }}
                   animate={{ opacity: 1, x: 0, y: [0, -18, 0] }}
                   transition={{
-                    opacity: { delay: 0.22, duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+                    opacity: {
+                      delay: 0.22,
+                      duration: 0.9,
+                      ease: [0.22, 1, 0.36, 1],
+                    },
                     x: { delay: 0.22, duration: 0.9, ease: [0.22, 1, 0.36, 1] },
-                    y: { delay: 1.1, duration: 4.5, repeat: Infinity, ease: "easeInOut" },
+                    y: {
+                      delay: 1.1,
+                      duration: 4.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
                   }}
                   className="w-full"
                 >
@@ -1272,7 +1553,11 @@ export default function LandingPage() {
             <motion.div
               initial={{ opacity: 0, y: 48 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.42, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                delay: 0.42,
+                duration: 1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="max-w-2xl mx-auto"
             >
               <LectureReport />
@@ -1387,8 +1672,8 @@ export default function LandingPage() {
                 className="text-sm sm:text-base leading-relaxed mx-auto"
                 style={{ color: "oklch(0.48 0 0)", maxWidth: "460px" }}
               >
-                대부분의 강의 분석 솔루션은 온라인 강의에 한정됩니다.
-                PREMIND는 실제 강의실에 카메라를 설치해 오프라인 현장까지 분석합니다.
+                대부분의 강의 분석 솔루션은 온라인 강의에 한정됩니다. PREMIND는
+                실제 강의실에 카메라를 설치해 오프라인 현장까지 분석합니다.
               </p>
             </FadeIn>
             <ComparisonTable />
@@ -1418,7 +1703,10 @@ export default function LandingPage() {
               >
                 더 나은 강의는
                 <br />
-                <span style={{ color: "oklch(0.72 0.17 44)" }}>데이터에서</span> 시작됩니다
+                <span style={{ color: "oklch(0.72 0.17 44)" }}>
+                  데이터에서
+                </span>{" "}
+                시작됩니다
               </h2>
               <p
                 className="text-base max-w-sm mx-auto mb-10 leading-relaxed"
