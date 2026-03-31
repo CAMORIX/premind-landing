@@ -374,30 +374,20 @@ function Navbar({ onContact }: { onContact: () => void }) {
         {/* Logo */}
         <motion.a
           href="/"
-          className="flex items-center gap-2.5 shrink-0 select-none focus:outline-none"
+          className="flex items-center shrink-0 select-none focus:outline-none"
           whileHover="hovered"
           initial="rest"
         >
-          <motion.img
-            src="/symbol.svg"
-            className="w-7 h-7 shrink-0"
-            alt="PREMIND symbol"
-            variants={{
-              rest: { scale: 1, rotate: 0 },
-              hovered: { scale: 1.08, rotate: -4 },
-            }}
-            transition={{ type: "spring", stiffness: 360, damping: 22 }}
-          />
           <motion.img
             src="/logo.svg"
             width={104}
             height={26}
             alt="PREMIND"
             variants={{
-              rest: { x: 0, opacity: 0.85 },
-              hovered: { x: 2, opacity: 1 },
+              rest: { opacity: 0.85 },
+              hovered: { opacity: 1 },
             }}
-            transition={{ type: "spring", stiffness: 360, damping: 26 }}
+            transition={{ duration: 0.15 }}
           />
         </motion.a>
 
