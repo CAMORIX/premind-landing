@@ -21,6 +21,222 @@ import {
 import { ReactLenis, useLenis } from "lenis/react";
 
 /* ────────────────────────────────────────
+   Contact Modal
+──────────────────────────────────────── */
+function ContactModal({ onClose }: { onClose: () => void }) {
+  const [form, setForm] = useState({ name: "", company: "", email: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  const inputCls = "w-full rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200 placeholder:text-[oklch(0.55_0_0)]";
+  const inputStyle = {
+    background: "oklch(1 0 0 / 0.06)",
+    border: "1px solid oklch(1 0 0 / 0.12)",
+    color: "oklch(0.96 0.005 55)",
+    backdropFilter: "blur(4px)",
+  };
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        key="backdrop"
+        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center px-0 sm:px-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        style={{ background: "oklch(0.06 0.015 44 / 0.75)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+        onClick={(e) => e.target === e.currentTarget && onClose()}
+      >
+        {/* Panel */}
+        <motion.div
+          key="panel"
+          className="relative w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden"
+          style={{
+            background: "oklch(0.14 0.018 44 / 0.85)",
+            backdropFilter: "blur(32px)",
+            WebkitBackdropFilter: "blur(32px)",
+            border: "1px solid oklch(1 0 0 / 0.10)",
+            boxShadow: "0 40px 100px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.08)",
+          }}
+          initial={{ opacity: 0, y: 56, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 32, scale: 0.97 }}
+          transition={{ type: "spring", stiffness: 340, damping: 32 }}
+        >
+          {/* Ambient glow */}
+          <div
+            className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-72 h-40 opacity-40"
+            style={{ background: "radial-gradient(ellipse, oklch(0.62 0.19 44) 0%, transparent 70%)" }}
+          />
+
+          {/* Header */}
+          <div className="relative flex items-start justify-between px-7 pt-7 pb-5"
+            style={{ borderBottom: "1px solid oklch(1 0 0 / 0.08)" }}
+          >
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: "oklch(0.62 0.19 44)" }} />
+                <span className="text-[10px] font-black tracking-[0.2em] uppercase" style={{ color: "oklch(0.62 0.19 44)" }}>
+                  PREMIND
+                </span>
+              </div>
+              <h3 className="text-xl font-black tracking-[-0.025em]" style={{ color: "oklch(0.97 0.005 55)" }}>
+                도입 문의하기
+              </h3>
+              <p className="text-xs mt-1" style={{ color: "oklch(0.50 0 0)" }}>
+                보내주시면 빠르게 답변드립니다
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150"
+              style={{ background: "oklch(1 0 0 / 0.07)", border: "1px solid oklch(1 0 0 / 0.10)", color: "oklch(0.55 0 0)" }}
+            >
+              <X size={14} />
+            </button>
+          </div>
+
+          {/* Body */}
+          <div className="relative px-7 py-6">
+            {status === "success" ? (
+              <motion.div
+                className="py-10 text-center"
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+              >
+                <motion.div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
+                  style={{ background: "oklch(0.62 0.19 44 / 0.15)", border: "1px solid oklch(0.62 0.19 44 / 0.3)" }}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 20, delay: 0.1 }}
+                >
+                  <Check size={26} style={{ color: "oklch(0.75 0.17 44)" }} />
+                </motion.div>
+                <p className="text-base font-black mb-1.5" style={{ color: "oklch(0.96 0.005 55)" }}>
+                  문의가 접수되었습니다
+                </p>
+                <p className="text-sm" style={{ color: "oklch(0.50 0 0)" }}>
+                  빠른 시일 내에 답변 드리겠습니다.
+                </p>
+              </motion.div>
+            ) : (
+              <form onSubmit={submit} className="flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { key: "name" as const, label: "이름", placeholder: "홍길동", required: true },
+                    { key: "company" as const, label: "기관 / 회사", placeholder: "캐모릭스", required: false },
+                  ].map(({ key, label, placeholder, required }) => (
+                    <div key={key}>
+                      <label className="text-[11px] font-semibold mb-1.5 block" style={{ color: "oklch(0.48 0 0)" }}>
+                        {label}{required && <span className="ml-0.5" style={{ color: "oklch(0.72 0.17 44)" }}>*</span>}
+                      </label>
+                      <input
+                        required={required}
+                        placeholder={placeholder}
+                        value={form[key]}
+                        onChange={set(key)}
+                        className={`${inputCls} focus:border-[oklch(0.62_0.19_44/0.6)] focus:bg-[oklch(1_0_0/0.09)]`}
+                        style={inputStyle}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-semibold mb-1.5 block" style={{ color: "oklch(0.48 0 0)" }}>
+                    이메일<span className="ml-0.5" style={{ color: "oklch(0.72 0.17 44)" }}>*</span>
+                  </label>
+                  <input
+                    required
+                    type="email"
+                    placeholder="hello@example.com"
+                    value={form.email}
+                    onChange={set("email")}
+                    className={`${inputCls} focus:border-[oklch(0.62_0.19_44/0.6)] focus:bg-[oklch(1_0_0/0.09)]`}
+                    style={inputStyle}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-semibold mb-1.5 block" style={{ color: "oklch(0.48 0 0)" }}>
+                    문의 내용<span className="ml-0.5" style={{ color: "oklch(0.72 0.17 44)" }}>*</span>
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    placeholder="도입 환경, 규모, 궁금한 점 등 자유롭게 적어주세요."
+                    value={form.message}
+                    onChange={set("message")}
+                    className={`${inputCls} resize-none focus:border-[oklch(0.62_0.19_44/0.6)] focus:bg-[oklch(1_0_0/0.09)]`}
+                    style={inputStyle}
+                  />
+                </div>
+
+                {status === "error" && (
+                  <motion.p
+                    className="text-xs px-3 py-2 rounded-lg"
+                    style={{ background: "oklch(0.55 0.2 25 / 0.15)", color: "oklch(0.75 0.15 25)", border: "1px solid oklch(0.55 0.2 25 / 0.2)" }}
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    전송에 실패했습니다. 잠시 후 다시 시도해주세요.
+                  </motion.p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="mt-1 w-full py-3.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all disabled:opacity-60 hover:-translate-y-px"
+                  style={{
+                    background: "linear-gradient(135deg, oklch(0.65 0.20 44), oklch(0.58 0.18 38))",
+                    boxShadow: "0 4px 20px oklch(0.62 0.19 44 / 0.45), inset 0 1px 0 oklch(1 0 0 / 0.15)",
+                  }}
+                >
+                  {status === "loading" ? (
+                    <>
+                      <motion.div
+                        className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
+                      />
+                      전송 중…
+                    </>
+                  ) : (
+                    <>문의 보내기 <ArrowRight size={14} /></>
+                  )}
+                </button>
+              </form>
+            )}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/* ────────────────────────────────────────
    Navbar
 ──────────────────────────────────────── */
 const NAV_ITEMS = [
@@ -28,7 +244,7 @@ const NAV_ITEMS = [
   { label: "사용 방법", href: "#how-it-works" },
 ];
 
-function Navbar() {
+function Navbar({ onContact }: { onContact: () => void }) {
   const rawY = useMotionValue(0);
   const smoothY = useSpring(rawY, { stiffness: 100, damping: 20, mass: 0.5 });
 
@@ -328,9 +544,8 @@ function Navbar() {
                 transition={{ delay: 0.15 }}
                 className="pt-2 pb-1"
               >
-                <a
-                  href="mailto:support@camorix.com"
-                  onClick={() => setMobileOpen(false)}
+                <button
+                  onClick={() => { setMobileOpen(false); onContact(); }}
                   className="flex items-center justify-center gap-1.5 w-full py-3 rounded-xl text-sm font-bold text-white"
                   style={{
                     background: "oklch(0.62 0.19 44)",
@@ -338,7 +553,7 @@ function Navbar() {
                   }}
                 >
                   도입 문의하기 <ArrowRight size={13} />
-                </a>
+                </button>
               </motion.div>
             </div>
           </motion.div>
@@ -1371,6 +1586,7 @@ function ProductScreenshots() {
    Main
 ──────────────────────────────────────── */
 export default function LandingPage() {
+  const [contactOpen, setContactOpen] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const heroRawX = useMotionValue(0);
   const heroRawY = useMotionValue(0);
@@ -1395,8 +1611,9 @@ export default function LandingPage() {
 
   return (
     <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
+      {contactOpen && <ContactModal onClose={() => setContactOpen(false)} />}
       <div className="min-h-screen overflow-x-hidden">
-        <Navbar />
+        <Navbar onContact={() => setContactOpen(true)} />
 
         {/* ── Hero ── */}
         <section
@@ -1482,8 +1699,8 @@ export default function LandingPage() {
                   transition={{ delay: 0.28, duration: 0.6 }}
                   className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3"
                 >
-                  <a
-                    href="mailto:support@camorix.com"
+                  <button
+                    onClick={() => setContactOpen(true)}
                     className="group flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-px"
                     style={{
                       background: "oklch(0.62 0.19 44)",
@@ -1495,7 +1712,7 @@ export default function LandingPage() {
                       size={14}
                       className="group-hover:translate-x-0.5 transition-transform"
                     />
-                  </a>
+                  </button>
                   <a
                     href="#features"
                     className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold border transition-all hover:border-white/20"
@@ -1716,8 +1933,8 @@ export default function LandingPage() {
                 <br />
                 개선도 불가능합니다. PREMIND가 첫 번째 데이터를 만들어 드립니다.
               </p>
-              <a
-                href="mailto:support@camorix.com"
+              <button
+                onClick={() => setContactOpen(true)}
                 className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 hover:-translate-y-px"
                 style={{
                   background: "oklch(0.62 0.19 44)",
@@ -1729,7 +1946,7 @@ export default function LandingPage() {
                   size={14}
                   className="group-hover:translate-x-0.5 transition-transform"
                 />
-              </a>
+              </button>
             </FadeIn>
           </div>
         </section>
