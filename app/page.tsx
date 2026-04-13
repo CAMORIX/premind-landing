@@ -1000,7 +1000,7 @@ function Overline({
 /* ────────────────────────────────────────
    Partners Bar
 ──────────────────────────────────────── */
-const PARTNERS = [{ src: "/partner1.jpeg", name: "한림대학교" }];
+const PARTNERS = [{ src: "/partner1.png", name: "한림대학교" }];
 
 function PartnersBar() {
   const ref = useRef<HTMLDivElement>(null);
@@ -1029,16 +1029,27 @@ function PartnersBar() {
               key={name}
               initial={{ opacity: 0, y: 10 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.5,
+                delay: i * 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               title={name}
             >
               <img
                 src={src}
                 alt={name}
                 className="h-14 w-auto object-contain select-none"
-                style={{ filter: "grayscale(30%) opacity(0.7)", transition: "filter 0.25s ease" }}
-                onMouseEnter={(e) => (e.currentTarget.style.filter = "grayscale(0%) opacity(1)")}
-                onMouseLeave={(e) => (e.currentTarget.style.filter = "grayscale(30%) opacity(0.7)")}
+                style={{
+                  filter: "grayscale(30%) opacity(0.7)",
+                  transition: "filter 0.25s ease",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.filter = "grayscale(0%) opacity(1)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.filter = "grayscale(30%) opacity(0.7)")
+                }
                 draggable={false}
               />
             </motion.div>
