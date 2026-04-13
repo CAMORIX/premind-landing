@@ -24,11 +24,20 @@ import { ReactLenis, useLenis } from "lenis/react";
    Contact Modal
 ──────────────────────────────────────── */
 function ContactModal({ onClose }: { onClose: () => void }) {
-  const [form, setForm] = useState({ name: "", company: "", email: "", message: "" });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [form, setForm] = useState({
+    name: "",
+    company: "",
+    email: "",
+    message: "",
+  });
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
+  const set =
+    (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +56,8 @@ function ContactModal({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const inputCls = "w-full rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200 placeholder:text-[oklch(0.55_0_0)]";
+  const inputCls =
+    "w-full rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200 placeholder:text-[oklch(0.55_0_0)]";
   const inputStyle = {
     background: "oklch(1 0 0 / 0.06)",
     border: "1px solid oklch(1 0 0 / 0.12)",
@@ -64,7 +74,11 @@ function ContactModal({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        style={{ background: "oklch(0.06 0.015 44 / 0.75)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+        style={{
+          background: "oklch(0.06 0.015 44 / 0.75)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+        }}
         onClick={(e) => e.target === e.currentTarget && onClose()}
       >
         {/* Panel */}
@@ -76,7 +90,8 @@ function ContactModal({ onClose }: { onClose: () => void }) {
             backdropFilter: "blur(32px)",
             WebkitBackdropFilter: "blur(32px)",
             border: "1px solid oklch(1 0 0 / 0.10)",
-            boxShadow: "0 40px 100px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.08)",
+            boxShadow:
+              "0 40px 100px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.08)",
           }}
           initial={{ opacity: 0, y: 56, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -86,21 +101,34 @@ function ContactModal({ onClose }: { onClose: () => void }) {
           {/* Ambient glow */}
           <div
             className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-72 h-40 opacity-40"
-            style={{ background: "radial-gradient(ellipse, oklch(0.62 0.19 44) 0%, transparent 70%)" }}
+            style={{
+              background:
+                "radial-gradient(ellipse, oklch(0.62 0.19 44) 0%, transparent 70%)",
+            }}
           />
 
           {/* Header */}
-          <div className="relative flex items-start justify-between px-7 pt-7 pb-5"
+          <div
+            className="relative flex items-start justify-between px-7 pt-7 pb-5"
             style={{ borderBottom: "1px solid oklch(1 0 0 / 0.08)" }}
           >
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ background: "oklch(0.62 0.19 44)" }} />
-                <span className="text-[10px] font-black tracking-[0.2em] uppercase" style={{ color: "oklch(0.62 0.19 44)" }}>
+                <div
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ background: "oklch(0.62 0.19 44)" }}
+                />
+                <span
+                  className="text-[10px] font-black tracking-[0.2em] uppercase"
+                  style={{ color: "oklch(0.62 0.19 44)" }}
+                >
                   PREMIND
                 </span>
               </div>
-              <h3 className="text-xl font-black tracking-[-0.025em]" style={{ color: "oklch(0.97 0.005 55)" }}>
+              <h3
+                className="text-xl font-black tracking-[-0.025em]"
+                style={{ color: "oklch(0.97 0.005 55)" }}
+              >
                 도입 문의하기
               </h3>
               <p className="text-xs mt-1" style={{ color: "oklch(0.50 0 0)" }}>
@@ -110,7 +138,11 @@ function ContactModal({ onClose }: { onClose: () => void }) {
             <button
               onClick={onClose}
               className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150"
-              style={{ background: "oklch(1 0 0 / 0.07)", border: "1px solid oklch(1 0 0 / 0.10)", color: "oklch(0.55 0 0)" }}
+              style={{
+                background: "oklch(1 0 0 / 0.07)",
+                border: "1px solid oklch(1 0 0 / 0.10)",
+                color: "oklch(0.55 0 0)",
+              }}
             >
               <X size={14} />
             </button>
@@ -127,14 +159,25 @@ function ContactModal({ onClose }: { onClose: () => void }) {
               >
                 <motion.div
                   className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-                  style={{ background: "oklch(0.62 0.19 44 / 0.15)", border: "1px solid oklch(0.62 0.19 44 / 0.3)" }}
+                  style={{
+                    background: "oklch(0.62 0.19 44 / 0.15)",
+                    border: "1px solid oklch(0.62 0.19 44 / 0.3)",
+                  }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 20, delay: 0.1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 20,
+                    delay: 0.1,
+                  }}
                 >
                   <Check size={26} style={{ color: "oklch(0.75 0.17 44)" }} />
                 </motion.div>
-                <p className="text-base font-black mb-1.5" style={{ color: "oklch(0.96 0.005 55)" }}>
+                <p
+                  className="text-base font-black mb-1.5"
+                  style={{ color: "oklch(0.96 0.005 55)" }}
+                >
                   문의가 접수되었습니다
                 </p>
                 <p className="text-sm" style={{ color: "oklch(0.50 0 0)" }}>
@@ -145,12 +188,33 @@ function ContactModal({ onClose }: { onClose: () => void }) {
               <form onSubmit={submit} className="flex flex-col gap-4">
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { key: "name" as const, label: "이름", placeholder: "홍길동", required: true },
-                    { key: "company" as const, label: "기관 / 회사", placeholder: "캐모릭스", required: false },
+                    {
+                      key: "name" as const,
+                      label: "이름",
+                      placeholder: "홍길동",
+                      required: true,
+                    },
+                    {
+                      key: "company" as const,
+                      label: "기관 / 회사",
+                      placeholder: "캐모릭스",
+                      required: false,
+                    },
                   ].map(({ key, label, placeholder, required }) => (
                     <div key={key}>
-                      <label className="text-[11px] font-semibold mb-1.5 block" style={{ color: "oklch(0.48 0 0)" }}>
-                        {label}{required && <span className="ml-0.5" style={{ color: "oklch(0.72 0.17 44)" }}>*</span>}
+                      <label
+                        className="text-[11px] font-semibold mb-1.5 block"
+                        style={{ color: "oklch(0.48 0 0)" }}
+                      >
+                        {label}
+                        {required && (
+                          <span
+                            className="ml-0.5"
+                            style={{ color: "oklch(0.72 0.17 44)" }}
+                          >
+                            *
+                          </span>
+                        )}
                       </label>
                       <input
                         required={required}
@@ -165,8 +229,17 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold mb-1.5 block" style={{ color: "oklch(0.48 0 0)" }}>
-                    이메일<span className="ml-0.5" style={{ color: "oklch(0.72 0.17 44)" }}>*</span>
+                  <label
+                    className="text-[11px] font-semibold mb-1.5 block"
+                    style={{ color: "oklch(0.48 0 0)" }}
+                  >
+                    이메일
+                    <span
+                      className="ml-0.5"
+                      style={{ color: "oklch(0.72 0.17 44)" }}
+                    >
+                      *
+                    </span>
                   </label>
                   <input
                     required
@@ -180,8 +253,17 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold mb-1.5 block" style={{ color: "oklch(0.48 0 0)" }}>
-                    문의 내용<span className="ml-0.5" style={{ color: "oklch(0.72 0.17 44)" }}>*</span>
+                  <label
+                    className="text-[11px] font-semibold mb-1.5 block"
+                    style={{ color: "oklch(0.48 0 0)" }}
+                  >
+                    문의 내용
+                    <span
+                      className="ml-0.5"
+                      style={{ color: "oklch(0.72 0.17 44)" }}
+                    >
+                      *
+                    </span>
                   </label>
                   <textarea
                     required
@@ -197,7 +279,11 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                 {status === "error" && (
                   <motion.p
                     className="text-xs px-3 py-2 rounded-lg"
-                    style={{ background: "oklch(0.55 0.2 25 / 0.15)", color: "oklch(0.75 0.15 25)", border: "1px solid oklch(0.55 0.2 25 / 0.2)" }}
+                    style={{
+                      background: "oklch(0.55 0.2 25 / 0.15)",
+                      color: "oklch(0.75 0.15 25)",
+                      border: "1px solid oklch(0.55 0.2 25 / 0.2)",
+                    }}
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
@@ -210,8 +296,10 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                   disabled={status === "loading"}
                   className="mt-1 w-full py-3.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all disabled:opacity-60 hover:-translate-y-px"
                   style={{
-                    background: "linear-gradient(135deg, oklch(0.65 0.20 44), oklch(0.58 0.18 38))",
-                    boxShadow: "0 4px 20px oklch(0.62 0.19 44 / 0.45), inset 0 1px 0 oklch(1 0 0 / 0.15)",
+                    background:
+                      "linear-gradient(135deg, oklch(0.65 0.20 44), oklch(0.58 0.18 38))",
+                    boxShadow:
+                      "0 4px 20px oklch(0.62 0.19 44 / 0.45), inset 0 1px 0 oklch(1 0 0 / 0.15)",
                   }}
                 >
                   {status === "loading" ? (
@@ -219,12 +307,18 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                       <motion.div
                         className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white"
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
+                        transition={{
+                          duration: 0.7,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
                       />
                       전송 중…
                     </>
                   ) : (
-                    <>문의 보내기 <ArrowRight size={14} /></>
+                    <>
+                      문의 보내기 <ArrowRight size={14} />
+                    </>
                   )}
                 </button>
               </form>
@@ -535,7 +629,10 @@ function Navbar({ onContact }: { onContact: () => void }) {
                 className="pt-2 pb-1"
               >
                 <button
-                  onClick={() => { setMobileOpen(false); onContact(); }}
+                  onClick={() => {
+                    setMobileOpen(false);
+                    onContact();
+                  }}
                   className="flex items-center justify-center gap-1.5 w-full py-3 rounded-xl text-sm font-bold text-white"
                   style={{
                     background: "oklch(0.62 0.19 44)",
@@ -897,6 +994,58 @@ function Overline({
     >
       {children}
     </p>
+  );
+}
+
+/* ────────────────────────────────────────
+   Partners Bar
+──────────────────────────────────────── */
+const PARTNERS = [{ src: "/partner1.jpeg", name: "한림대학교" }];
+
+function PartnersBar() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+
+  return (
+    <section style={{ background: "oklch(0.978 0.003 60)" }}>
+      <div
+        ref={ref}
+        className="max-w-6xl mx-auto px-6 py-12"
+        style={{ borderTop: "1px solid oklch(0.90 0.005 55)" }}
+      >
+        <motion.p
+          className="text-center text-[11px] font-bold tracking-[0.22em] uppercase mb-10"
+          style={{ color: "oklch(0.65 0 0)" }}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.5 }}
+        >
+          도입 기관
+        </motion.p>
+
+        <div className="flex items-center justify-center flex-wrap gap-10">
+          {PARTNERS.map(({ src, name }, i) => (
+            <motion.div
+              key={name}
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              title={name}
+            >
+              <img
+                src={src}
+                alt={name}
+                className="h-14 w-auto object-contain select-none"
+                style={{ filter: "grayscale(30%) opacity(0.7)", transition: "filter 0.25s ease" }}
+                onMouseEnter={(e) => (e.currentTarget.style.filter = "grayscale(0%) opacity(1)")}
+                onMouseLeave={(e) => (e.currentTarget.style.filter = "grayscale(30%) opacity(0.7)")}
+                draggable={false}
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -1780,6 +1929,8 @@ export default function LandingPage() {
             }}
           />
         </section>
+
+        <PartnersBar />
 
         <FeaturesSection />
 
