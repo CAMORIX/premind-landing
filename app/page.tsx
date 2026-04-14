@@ -1002,17 +1002,13 @@ function Overline({
 ──────────────────────────────────────── */
 const PARTNERS = [{ src: "/partner1.png", name: "한림대학교" }];
 
-function PartnersBar() {
+function PartnersSection() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section style={{ background: "oklch(0.978 0.003 60)" }}>
-      <div
-        ref={ref}
-        className="max-w-6xl mx-auto px-6 py-12"
-        style={{ borderTop: "1px solid oklch(0.90 0.005 55)" }}
-      >
+    <section style={{ background: "oklch(1 0 0)" }}>
+      <div ref={ref} className="max-w-6xl mx-auto px-6 py-16">
         <motion.p
           className="text-center text-[11px] font-bold tracking-[0.22em] uppercase mb-10"
           style={{ color: "oklch(0.65 0 0)" }}
@@ -1029,29 +1025,21 @@ function PartnersBar() {
               key={name}
               initial={{ opacity: 0, y: 10 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.5,
-                delay: i * 0.1,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              title={name}
+              transition={{ duration: 0.5, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col items-center gap-3"
             >
               <img
                 src={src}
                 alt={name}
-                className="h-14 w-auto object-contain select-none"
-                style={{
-                  filter: "grayscale(30%) opacity(0.7)",
-                  transition: "filter 0.25s ease",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.filter = "grayscale(0%) opacity(1)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.filter = "grayscale(30%) opacity(0.7)")
-                }
+                className="h-16 w-auto object-contain select-none"
+                style={{ filter: "grayscale(20%) opacity(0.75)", transition: "filter 0.25s ease" }}
+                onMouseEnter={(e) => (e.currentTarget.style.filter = "grayscale(0%) opacity(1)")}
+                onMouseLeave={(e) => (e.currentTarget.style.filter = "grayscale(20%) opacity(0.75)")}
                 draggable={false}
               />
+              <span className="text-xs font-semibold" style={{ color: "oklch(0.55 0 0)" }}>
+                {name}
+              </span>
             </motion.div>
           ))}
         </div>
@@ -1941,7 +1929,7 @@ export default function LandingPage() {
           />
         </section>
 
-        <PartnersBar />
+        <PartnersSection />
 
         <FeaturesSection />
 
