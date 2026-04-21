@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import {
   motion,
   useInView,
@@ -1025,19 +1026,28 @@ function PartnersSection() {
               key={name}
               initial={{ opacity: 0, y: 10 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.5,
+                delay: 0.1 + i * 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="flex flex-col items-center gap-3"
             >
-              <img
+              <Image
                 src={src}
                 alt={name}
+                width={120}
+                height={64}
                 className="h-16 w-auto object-contain select-none"
                 style={{ filter: "grayscale(20%) opacity(0.75)", transition: "filter 0.25s ease" }}
                 onMouseEnter={(e) => (e.currentTarget.style.filter = "grayscale(0%) opacity(1)")}
                 onMouseLeave={(e) => (e.currentTarget.style.filter = "grayscale(20%) opacity(0.75)")}
                 draggable={false}
               />
-              <span className="text-xs font-semibold" style={{ color: "oklch(0.55 0 0)" }}>
+              <span
+                className="text-xs font-semibold"
+                style={{ color: "oklch(0.55 0 0)" }}
+              >
                 {name}
               </span>
             </motion.div>
@@ -1291,6 +1301,162 @@ function HowItWorksSteps() {
 }
 
 /* ────────────────────────────────────────
+   Pricing Section
+──────────────────────────────────────── */
+function PricingSection({ onContact }: { onContact: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  const features = ["음성 분석", "자료 분석", "영상 분석 (발표)", "영상 분석 (청중)"];
+
+  return (
+    <section style={{ background: "oklch(0.09 0.018 44)" }}>
+      <div ref={ref} className="max-w-6xl mx-auto px-6 py-28">
+
+        <motion.div
+          className="mb-16 text-center"
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Overline light>요금제</Overline>
+          <h2
+            className="text-3xl sm:text-4xl font-black tracking-[-0.025em]"
+            style={{ color: "oklch(0.96 0.005 55)", lineHeight: 1.2 }}
+          >
+            분석한 만큼만
+            <br />
+            합리적으로
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+
+          {/* ── 메인 카드 ── */}
+          <motion.div
+            className="relative rounded-2xl overflow-hidden flex flex-col"
+            initial={{ opacity: 0, y: 24 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              background: "oklch(0.15 0.022 44)",
+              border: "1px solid oklch(0.62 0.19 44 / 0.5)",
+              boxShadow: "0 0 40px oklch(0.62 0.19 44 / 0.18)",
+            }}
+          >
+            <div
+              className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-64 h-32 opacity-50"
+              style={{ background: "radial-gradient(ellipse, oklch(0.62 0.19 44) 0%, transparent 70%)" }}
+            />
+
+            <div className="relative px-7 pt-7 pb-0 flex items-center justify-between">
+              <span
+                className="text-[10px] font-black tracking-[0.18em] uppercase px-2.5 py-1 rounded-full"
+                style={{ background: "oklch(0.62 0.19 44)", color: "white" }}
+              >
+                분석 서비스
+              </span>
+              <span className="text-[10px] font-semibold" style={{ color: "oklch(0.62 0.19 44)" }}>
+                시간당
+              </span>
+            </div>
+
+            <div className="relative px-7 pt-5 pb-6" style={{ borderBottom: "1px solid oklch(1 0 0 / 0.08)" }}>
+              <div className="flex items-end gap-1.5 mb-1">
+                <span
+                  className="font-black tracking-[-0.03em]"
+                  style={{ fontSize: "clamp(2.2rem, 5vw, 2.8rem)", color: "oklch(0.96 0.005 55)", lineHeight: 1 }}
+                >
+                  19,900
+                </span>
+                <span className="text-base font-bold mb-1" style={{ color: "oklch(0.55 0 0)" }}>원</span>
+              </div>
+              <p className="text-xs" style={{ color: "oklch(0.45 0 0)" }}>VAT 별도 · 분석 1시간 기준</p>
+            </div>
+
+            <div className="relative px-7 py-6 flex flex-col gap-3 flex-1">
+              {features.map((f, i) => (
+                <motion.div
+                  key={f}
+                  className="flex items-center gap-3"
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.35, delay: 0.3 + i * 0.07 }}
+                >
+                  <div
+                    className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                    style={{ background: "oklch(0.62 0.19 44 / 0.2)" }}
+                  >
+                    <Check size={11} style={{ color: "oklch(0.75 0.17 44)" }} />
+                  </div>
+                  <span className="text-sm" style={{ color: "oklch(0.75 0 0)" }}>{f}</span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* ── 문의 카드 2개 ── */}
+          <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {[
+              {
+                id: "software",
+                label: "소프트웨어",
+                desc: "서비스형(SaaS) 또는 온프레미스 설치형으로 제공됩니다.",
+              },
+              {
+                id: "hardware",
+                label: "하드웨어",
+                desc: "오프라인 강의실 카메라 설치 및 네트워크 구성을 포함합니다.",
+              },
+            ].map(({ id, label, desc }, i) => (
+              <motion.div
+                key={id}
+                className="rounded-2xl p-7 flex flex-col gap-5"
+                initial={{ opacity: 0, y: 24 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.2 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  background: "oklch(0.13 0.016 44)",
+                  border: "1px solid oklch(1 0 0 / 0.07)",
+                }}
+              >
+                <span
+                  className="text-[10px] font-black tracking-[0.18em] uppercase px-2.5 py-1 rounded-full self-start"
+                  style={{ background: "oklch(1 0 0 / 0.07)", color: "oklch(0.55 0 0)" }}
+                >
+                  {label}
+                </span>
+
+                <div className="flex-1">
+                  <p className="text-2xl font-black mb-2" style={{ color: "oklch(0.88 0.005 55)" }}>
+                    별도 문의
+                  </p>
+                  <p className="text-xs leading-relaxed" style={{ color: "oklch(0.45 0 0)" }}>
+                    {desc}
+                  </p>
+                </div>
+
+                <button
+                  onClick={onContact}
+                  className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-80"
+                  style={{
+                    background: "oklch(1 0 0 / 0.06)",
+                    border: "1px solid oklch(1 0 0 / 0.10)",
+                    color: "oklch(0.60 0 0)",
+                  }}
+                >
+                  문의하기
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ────────────────────────────────────────
    Comparison Table
 ──────────────────────────────────────── */
 function ComparisonTable() {
@@ -1534,7 +1700,7 @@ function OfflineScene() {
               className="relative rounded-2xl overflow-hidden"
               style={{ border: "1px solid oklch(0.20 0.015 44)" }}
             >
-              <img src={src} alt={label} className="w-full h-auto block" />
+              <Image src={src} alt={label} width={1280} height={720} className="w-full h-auto block" />
               {/* Label */}
               <div
                 className="absolute bottom-0 left-0 right-0 px-5 py-4"
@@ -1894,9 +2060,11 @@ export default function LandingPage() {
                   }}
                   className="w-full"
                 >
-                  <img
+                  <Image
                     src="/illust.png"
                     alt=""
+                    width={500}
+                    height={500}
                     className="w-full h-auto"
                     style={{ mixBlendMode: "screen" }}
                   />
@@ -2037,6 +2205,8 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <PricingSection onContact={() => setContactOpen(true)} />
+
         {/* ── CTA ── */}
         <section style={{ background: "oklch(0.09 0.018 44)" }}>
           <div className="relative max-w-6xl mx-auto px-6 py-28 text-center overflow-hidden">
@@ -2102,8 +2272,10 @@ export default function LandingPage() {
             {/* Top row */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-2.5">
-                <img
+                <Image
                   src="/symbol.svg"
+                  width={24}
+                  height={24}
                   className="w-6 h-6 shrink-0 opacity-30"
                   alt="PREMIND"
                 />
