@@ -37,8 +37,8 @@ function ContactModal({ onClose }: { onClose: () => void }) {
 
   const set =
     (k: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setForm((f) => ({ ...f, [k]: e.target.value }));
+      (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+        setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -337,6 +337,7 @@ function ContactModal({ onClose }: { onClose: () => void }) {
 const NAV_ITEMS = [
   { label: "기능", href: "#features" },
   { label: "사용 방법", href: "#how-it-works" },
+  { label: "분석 요청", href: "#analysis-request" },
 ];
 
 function Navbar({ onContact }: { onContact: () => void }) {
@@ -1457,6 +1458,319 @@ function PricingSection({ onContact }: { onContact: () => void }) {
 }
 
 /* ────────────────────────────────────────
+   Analysis Request — 강의 자료 링크 + 설명 받기
+──────────────────────────────────────── */
+function AnalysisRequestSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    fileUrl: "",
+    description: "",
+  });
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const set =
+    (k: keyof typeof form) =>
+      (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+        setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/analysis-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error ?? "전송 실패");
+      setStatus("success");
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "전송 실패");
+    }
+  };
+
+  const loading = status === "loading";
+
+  const inputCls =
+    "w-full rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200 placeholder:text-[oklch(0.45_0_0)]";
+  const inputStyle = {
+    background: "oklch(1 0 0 / 0.05)",
+    border: "1px solid oklch(1 0 0 / 0.10)",
+    color: "oklch(0.96 0.005 55)",
+    backdropFilter: "blur(4px)",
+  } as const;
+
+  return (
+    <section id="analysis-request" style={{ background: "oklch(0.11 0.018 44)" }}>
+      <div ref={ref} className="max-w-6xl mx-auto px-6 py-28">
+        <motion.div
+          className="mb-12 text-center"
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Overline light>분석 요청</Overline>
+          <h2
+            className="text-3xl sm:text-4xl font-black tracking-[-0.025em] mb-5"
+            style={{ color: "oklch(0.96 0.005 55)", lineHeight: 1.2 }}
+          >
+            강의 자료를
+            <br />
+            보내주세요
+          </h2>
+          <p
+            className="text-sm sm:text-base leading-relaxed mx-auto"
+            style={{ color: "oklch(0.48 0 0)", maxWidth: "520px" }}
+          >
+            영상·음성·슬라이드를 Google Drive, Dropbox, WeTransfer 등 원하시는 곳에
+            올리고 링크 붙여넣어주세요.
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="relative mx-auto rounded-3xl overflow-hidden"
+          style={{
+            maxWidth: "640px",
+            background: "oklch(0.14 0.018 44 / 0.92)",
+            border: "1px solid oklch(1 0 0 / 0.08)",
+            boxShadow:
+              "0 30px 80px oklch(0 0 0 / 0.4), inset 0 1px 0 oklch(1 0 0 / 0.05)",
+          }}
+          initial={{ opacity: 0, y: 28 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div
+            className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[420px] h-44 opacity-40"
+            style={{
+              background:
+                "radial-gradient(ellipse, oklch(0.62 0.19 44) 0%, transparent 70%)",
+            }}
+          />
+
+          {status === "success" ? (
+            <motion.div
+              className="relative px-8 py-16 text-center"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+            >
+              <motion.div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                style={{
+                  background: "oklch(0.62 0.19 44 / 0.15)",
+                  border: "1px solid oklch(0.62 0.19 44 / 0.3)",
+                }}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 20,
+                  delay: 0.1,
+                }}
+              >
+                <Check size={28} style={{ color: "oklch(0.75 0.17 44)" }} />
+              </motion.div>
+              <p
+                className="text-lg font-black mb-2"
+                style={{ color: "oklch(0.96 0.005 55)" }}
+              >
+                분석 요청이 접수되었습니다
+              </p>
+              <p className="text-sm" style={{ color: "oklch(0.50 0 0)" }}>
+                결과는 입력하신 이메일로 전달됩니다.
+              </p>
+              <button
+                onClick={() => {
+                  setForm({
+                    name: "",
+                    email: "",
+                    fileUrl: "",
+                    description: "",
+                  });
+                  setStatus("idle");
+                }}
+                className="mt-8 px-5 py-2 rounded-lg text-xs font-semibold"
+                style={{
+                  background: "oklch(1 0 0 / 0.06)",
+                  border: "1px solid oklch(1 0 0 / 0.10)",
+                  color: "oklch(0.60 0 0)",
+                }}
+              >
+                새 요청 보내기
+              </button>
+            </motion.div>
+          ) : (
+            <form onSubmit={submit} className="relative p-7 sm:p-8 flex flex-col gap-5">
+              {/* File link */}
+              <div>
+                <label
+                  className="text-[11px] font-semibold mb-1.5 block"
+                  style={{ color: "oklch(0.48 0 0)" }}
+                >
+                  강의 자료 링크
+                  <span className="ml-0.5" style={{ color: "oklch(0.72 0.17 44)" }}>
+                    *
+                  </span>
+                </label>
+                <input
+                  required
+                  type="url"
+                  disabled={loading}
+                  placeholder="들어가서 다운로드 받을 수 있는 링크"
+                  value={form.fileUrl}
+                  onChange={set("fileUrl")}
+                  className={`${inputCls} focus:border-[oklch(0.62_0.19_44/0.6)] focus:bg-[oklch(1_0_0/0.08)]`}
+                  style={inputStyle}
+                />
+                <p
+                  className="text-[10px] mt-1.5 leading-relaxed"
+                  style={{ color: "oklch(0.42 0 0)" }}
+                >
+                  여러 파일이면 폴더 단위로 공유 링크 한 개만 보내주시면 됩니다.
+                  공유 권한이 &quot;링크가 있는 모든 사용자&quot;인지 확인해주세요.
+                </p>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label
+                  className="text-[11px] font-semibold mb-1.5 block"
+                  style={{ color: "oklch(0.48 0 0)" }}
+                >
+                  강의 설명
+                  <span className="ml-0.5" style={{ color: "oklch(0.72 0.17 44)" }}>
+                    *
+                  </span>
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  disabled={loading}
+                  placeholder="강의 주제, 시간, 인원, 분석에서 특히 보고 싶은 부분 등 자유롭게 적어주세요."
+                  value={form.description}
+                  onChange={set("description")}
+                  className={`${inputCls} resize-none focus:border-[oklch(0.62_0.19_44/0.6)] focus:bg-[oklch(1_0_0/0.08)]`}
+                  style={inputStyle}
+                />
+              </div>
+
+              {/* Name + email */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label
+                    className="text-[11px] font-semibold mb-1.5 block"
+                    style={{ color: "oklch(0.48 0 0)" }}
+                  >
+                    이름
+                    <span
+                      className="ml-0.5"
+                      style={{ color: "oklch(0.72 0.17 44)" }}
+                    >
+                      *
+                    </span>
+                  </label>
+                  <input
+                    required
+                    disabled={loading}
+                    placeholder="홍길동"
+                    value={form.name}
+                    onChange={set("name")}
+                    className={`${inputCls} focus:border-[oklch(0.62_0.19_44/0.6)] focus:bg-[oklch(1_0_0/0.08)]`}
+                    style={inputStyle}
+                  />
+                </div>
+                <div>
+                  <label
+                    className="text-[11px] font-semibold mb-1.5 block"
+                    style={{ color: "oklch(0.48 0 0)" }}
+                  >
+                    이메일
+                    <span
+                      className="ml-0.5"
+                      style={{ color: "oklch(0.72 0.17 44)" }}
+                    >
+                      *
+                    </span>
+                  </label>
+                  <input
+                    required
+                    type="email"
+                    disabled={loading}
+                    placeholder="hello@example.com"
+                    value={form.email}
+                    onChange={set("email")}
+                    className={`${inputCls} focus:border-[oklch(0.62_0.19_44/0.6)] focus:bg-[oklch(1_0_0/0.08)]`}
+                    style={inputStyle}
+                  />
+                </div>
+              </div>
+
+              {status === "error" && errorMsg && (
+                <motion.p
+                  className="text-xs px-3 py-2 rounded-lg"
+                  style={{
+                    background: "oklch(0.55 0.2 25 / 0.12)",
+                    color: "oklch(0.78 0.15 25)",
+                    border: "1px solid oklch(0.55 0.2 25 / 0.2)",
+                  }}
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  {errorMsg}
+                </motion.p>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all disabled:opacity-80 hover:-translate-y-px"
+                style={{
+                  background:
+                    "linear-gradient(135deg, oklch(0.65 0.20 44), oklch(0.58 0.18 38))",
+                  boxShadow:
+                    "0 4px 20px oklch(0.62 0.19 44 / 0.45), inset 0 1px 0 oklch(1 0 0 / 0.15)",
+                }}
+              >
+                {loading ? (
+                  <>
+                    <motion.div
+                      className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white"
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 0.7,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                    />
+                    전송 중…
+                  </>
+                ) : (
+                  <>
+                    분석 요청 보내기 <ArrowRight size={14} />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ────────────────────────────────────────
    Comparison Table
 ──────────────────────────────────────── */
 function ComparisonTable() {
@@ -2206,6 +2520,8 @@ export default function LandingPage() {
         </section>
 
         <PricingSection onContact={() => setContactOpen(true)} />
+
+        <AnalysisRequestSection />
 
         {/* ── CTA ── */}
         <section style={{ background: "oklch(0.09 0.018 44)" }}>
